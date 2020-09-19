@@ -74,6 +74,10 @@
 
 feeds 托管在 github 上, 我无法获取订阅这些 feeds 的用户的任何信息
 
+### 是如何爬取的?
+
+真实: 全部是我一条一条定时手动抄录的, 一个小时最多抄录两万个公众号的内容.
+
 ### 国内访问速度
 
 后续会将 feeds 分支同步更新到 [gitee](https://gitee.com/BlogZ/wechat-feeds)
