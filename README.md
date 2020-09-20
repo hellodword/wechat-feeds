@@ -2,52 +2,40 @@
 
 > 给微信公众号生成 RSS 订阅源
 
-Table of Contents
-=================
+* [WeChat-Feeds](#wechat-feeds)
+   * [如何使用](#如何使用)
+   * [如何添加/修改公众号](#如何添加修改公众号)
+   * [FAQ](#faq)
+      * [为什么选用 bizid?](#为什么选用-bizid)
+      * [如何获取 bizid?](#如何获取-bizid)
+      * [服务是否稳定?](#服务是否稳定)
+      * [feeds 更新频率如何?](#feeds-更新频率如何)
+      * [数量是否有上限?](#数量是否有上限)
+      * [是否有隐私风险?](#是否有隐私风险)
+      * [是如何爬取的?](#是如何爬取的)
+      * [国内加速](#国内加速)
+   * [结构](#结构)
+      * [main](#main)
+      * [feeds](#feeds)
+   * [TODO](#todo)
 
-   * [WeChat-Feeds](#wechat-feeds)
-      * [结构](#结构)
-         * [main](#main)
-         * [feeds](#feeds)
-      * [添加/修改公众号](#添加修改公众号)
-      * [FAQ](#faq)
-         * [为什么选用 bizid?](#为什么选用-bizid)
-         * [如何获取 bizid?](#如何获取-bizid)
-         * [服务是否稳定?](#服务是否稳定)
-         * [feeds 更新频率如何?](#feeds-更新频率如何)
-         * [数量是否有上限?](#数量是否有上限)
-         * [是否有隐私风险?](#是否有隐私风险)
-         * [是如何爬取的?](#是如何爬取的)
-         * [国内加速](#国内加速)
-      * [TODO](#todo)
+众所周知, 微信公众号比较封闭, 爬取也有一定门槛, 对于 RSS 重度用户来说很不友好, 加上如今订阅号的推送也是乱序时间轴的, 作为在推荐算法的重重包围下做挣扎的一员, 希望在此借助 Github 为同好提供有限的订阅服务.
 
-众所周知微信公众号比较封闭, 爬取也有一定门槛, 对于 RSS 重度用户来说很不友好, 加上如今订阅号的推送也是乱序时间轴的, 作为在推荐算法的重重包围下做挣扎的一员, 希望在此借助 Github 为同好提供有限的订阅服务.
+--- 
+## 如何使用
 
+1. 所有 feeds 将采用 [Atom](https://tools.ietf.org/html/rfc4287) 标准, 请确保你的 RSS 订阅工具支持这种标准  
 
-## 结构
+2. 在 [list.csv](https://github.com/hellodword/wechat-feeds/blob/main/list.csv) 中查找名称, 或者根据 `bizid` 查找会最精准, 参见 [如何获取 bizid](#如何获取-bizid). 例如:
 
+   1. [虎克老湿基](https://github.com/hellodword/wechat-feeds/raw/feeds/MzIzNDE3NjI0MQ==.xml) 的 `bizid` 为 `MzIzNDE3NjI0MQ==`, 则其 feed 为 [`https://github.com/hellodword/wechat-feeds/raw/feeds/MzIzNDE3NjI0MQ==.xml`](https://github.com/hellodword/wechat-feeds/raw/feeds/MzIzNDE3NjI0MQ==.xml)
 
-### main
-主分支 `main` 的结构:
+   2. [社会扶贫](https://github.com/hellodword/wechat-feeds/raw/feeds/MzI1NTQxODA4NA==.xml) 的 `bizid` 为 `MzI1NTQxODA4NA==`, 则其 feed 为 [`https://github.com/hellodword/wechat-feeds/raw/feeds/MzI1NTQxODA4NA==.xml`](https://github.com/hellodword/wechat-feeds/raw/feeds/MzI1NTQxODA4NA==.xml)
 
-```
-.
-├── README.md
-└── list.csv
-```
+3. 以上为 github 上的地址, 国内访问参见 [国内加速](#国内加速)
 
-1. [README.md](https://github.com/hellodword/wechat-feeds/blob/main/README.md)
-2. [list.csv](https://github.com/hellodword/wechat-feeds/blob/main/list.csv): 待爬取的列表, 由 `name`, `bizid`, `description` 组成的无序列表
-
-### feeds
-分支 `feeds` 将储存更新的 feeds, 所有 feeds 将采用 [Atom](https://tools.ietf.org/html/rfc4287) 标准. 例如:
-
-1. [虎克老湿基](https://github.com/hellodword/wechat-feeds/raw/feeds/MzIzNDE3NjI0MQ==.xml) 的 `bizid` 为 `MzIzNDE3NjI0MQ==`, 则其 feed 为 [`https://github.com/hellodword/wechat-feeds/raw/feeds/MzIzNDE3NjI0MQ==.xml`](https://github.com/hellodword/wechat-feeds/raw/feeds/MzIzNDE3NjI0MQ==.xml)
-
-2. [社会扶贫](https://github.com/hellodword/wechat-feeds/raw/feeds/MzI1NTQxODA4NA==.xml) 的 `bizid` 为 `MzI1NTQxODA4NA==`, 则其 feed 为 [`https://github.com/hellodword/wechat-feeds/raw/feeds/MzI1NTQxODA4NA==.xml`](https://github.com/hellodword/wechat-feeds/raw/feeds/MzI1NTQxODA4NA==.xml)
-
-
-## 添加/修改公众号
+---
+## 如何添加/修改公众号
 
 > fork -> 修改 list.csv -> pull request  
 > 本指南只针对不是很熟悉 github 的朋友, 老手可忽略~
@@ -91,6 +79,7 @@ Table of Contents
 ![email](img/how-to-pr/email.png)
 
 
+---
 
 ## FAQ
 
@@ -128,9 +117,35 @@ feeds 托管在 github 上, 我无法获取订阅这些 feeds 的用户的任何
 
 ### 国内加速
 
-已将 feeds 分支同步更新到 [gitee](https://gitee.com/BlogZ/wechat-feeds), 所以 [`https://github.com/hellodword/wechat-feeds/raw/feeds/MzIzNDE3NjI0MQ==.xml`](https://github.com/hellodword/wechat-feeds/raw/feeds/MzIzNDE3NjI0MQ==.xml) 对应的国内加速地址为 [`https://gitee.com/BlogZ/wechat-feeds/raw/feeds/MzIzNDE3NjI0MQ==.xml`](https://gitee.com/BlogZ/wechat-feeds/raw/feeds/MzIzNDE3NjI0MQ==.xml)
+已将 feeds 分支同步更新到 [gitee](https://gitee.com/BlogZ/wechat-feeds), 所以只需要改变地址的前半部分, 例如:  
+[`https://github.com/hellodword/wechat-feeds/raw/feeds/MzIzNDE3NjI0MQ==.xml`](https://github.com/hellodword/wechat-feeds/raw/feeds/MzIzNDE3NjI0MQ==.xml)  
+
+对应的国内加速地址为:  
+[`https://gitee.com/BlogZ/wechat-feeds/raw/feeds/MzIzNDE3NjI0MQ==.xml`](https://gitee.com/BlogZ/wechat-feeds/raw/feeds/MzIzNDE3NjI0MQ==.xml)
 
 
+---
+
+## 结构
+
+
+### main
+主分支 `main` 的结构:
+
+```
+.
+├── README.md
+└── list.csv
+```
+
+1. [README.md](https://github.com/hellodword/wechat-feeds/blob/main/README.md)
+2. [list.csv](https://github.com/hellodword/wechat-feeds/blob/main/list.csv): 待爬取的列表, 由 `name`, `bizid`, `description` 组成的无序列表
+
+### feeds
+
+分支 `feeds` 将储存更新的 feeds
+
+---
 ## TODO
 
 - [x] 同步 gitee 提升访问体验
