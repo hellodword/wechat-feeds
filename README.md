@@ -18,7 +18,7 @@ Table of Contents
          * [数量是否有上限?](#数量是否有上限)
          * [是否有隐私风险?](#是否有隐私风险)
          * [是如何爬取的?](#是如何爬取的)
-         * [国内访问速度](#国内访问速度)
+         * [国内加速](#国内加速)
       * [TODO](#todo)
 
 众所周知微信公众号比较封闭, 爬取也有一定门槛, 对于 RSS 重度用户来说很不友好, 加上如今订阅号的推送也是乱序时间轴的, 作为在推荐算法的重重包围下做挣扎的一员, 希望在此借助 Github 为同好提供有限的订阅服务.
@@ -42,9 +42,9 @@ Table of Contents
 ### feeds
 分支 `feeds` 将储存更新的 feeds, 所有 feeds 将采用 [Atom](https://tools.ietf.org/html/rfc4287) 标准. 例如:
 
-1. [虎克老湿基](https://github.com/hellodword/wechat-feeds/raw/feeds/MzIzNDE3NjI0MQ==.atom) 的 `bizid` 为 `MzIzNDE3NjI0MQ==`, 则其 feed 为 [`https://github.com/hellodword/wechat-feeds/raw/feeds/MzIzNDE3NjI0MQ==.atom`](https://github.com/hellodword/wechat-feeds/raw/feeds/MzIzNDE3NjI0MQ==.atom)
+1. [虎克老湿基](https://github.com/hellodword/wechat-feeds/raw/feeds/MzIzNDE3NjI0MQ==.xml) 的 `bizid` 为 `MzIzNDE3NjI0MQ==`, 则其 feed 为 [`https://github.com/hellodword/wechat-feeds/raw/feeds/MzIzNDE3NjI0MQ==.xml`](https://github.com/hellodword/wechat-feeds/raw/feeds/MzIzNDE3NjI0MQ==.xml)
 
-2. [社会扶贫](https://github.com/hellodword/wechat-feeds/raw/feeds/MzI1NTQxODA4NA==.atom) 的 `bizid` 为 `MzI1NTQxODA4NA==`, 则其 feed 为 [`https://github.com/hellodword/wechat-feeds/raw/feeds/MzI1NTQxODA4NA==.atom`](https://github.com/hellodword/wechat-feeds/raw/feeds/MzI1NTQxODA4NA==.atom)
+2. [社会扶贫](https://github.com/hellodword/wechat-feeds/raw/feeds/MzI1NTQxODA4NA==.xml) 的 `bizid` 为 `MzI1NTQxODA4NA==`, 则其 feed 为 [`https://github.com/hellodword/wechat-feeds/raw/feeds/MzI1NTQxODA4NA==.xml`](https://github.com/hellodword/wechat-feeds/raw/feeds/MzI1NTQxODA4NA==.xml)
 
 
 ## 添加/修改公众号
@@ -92,9 +92,6 @@ Table of Contents
 
 
 
-
-
-
 ## FAQ
 
 ### 为什么选用 bizid?
@@ -129,14 +126,14 @@ feeds 托管在 github 上, 我无法获取订阅这些 feeds 的用户的任何
 
 真实: 全部是我一条一条定时手动抄录的, 一个小时最多抄录两万个公众号的内容.
 
-### 国内访问速度
+### 国内加速
 
-后续会将 feeds 分支同步更新到 [gitee](https://gitee.com/BlogZ/wechat-feeds)
+已将 feeds 分支同步更新到 [gitee](https://gitee.com/BlogZ/wechat-feeds), 所以 [`https://github.com/hellodword/wechat-feeds/raw/feeds/MzIzNDE3NjI0MQ==.xml`](https://github.com/hellodword/wechat-feeds/raw/feeds/MzIzNDE3NjI0MQ==.xml) 对应的国内加速地址为 [`https://gitee.com/BlogZ/wechat-feeds/raw/feeds/MzIzNDE3NjI0MQ==.xml`](https://gitee.com/BlogZ/wechat-feeds/raw/feeds/MzIzNDE3NjI0MQ==.xml)
 
 
 ## TODO
 
-- [ ] 同步 gitee 提升访问体验
+- [x] 同步 gitee 提升访问体验
 - [ ] 根据 list.csv 生成精美一些的列表页, 通过 pages 展示
 - [ ] 添加 item description
 - [ ] 思考更简单的添加公众号的方式, 前提是继续控制成本
