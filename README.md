@@ -31,16 +31,49 @@
 
 ## 添加/修改公众号
 
-> fork -> 修改 list.csv -> pull request
+> fork -> 修改 list.csv -> pull request  
+> 本指南只针对不是很熟悉 github 的朋友, 老手可忽略~
 
-1. fork
+1. 首先要有一个 github 账户: [注册](https://github.com/join?source=login)  [登录](https://github.com/login)
 
-2. 修改 list.csv
-    1. 获取 `bizid`, 参见 [为什么选用 bizid](#为什么选用-bizid) 和 [如何获取 bizid](#如何获取-bizid)
-    2. 选择 csv 是为了方便不是很熟悉各种文件格式的人群, 分隔符为半角逗号, 文件编码为 `UTF8 with BOM`, 换行为 `LF`, 请务必用 Excel、WPS或者可以对其正常编辑而不破坏编码和换行的文本编辑器进行编辑
+2. 登录后如下图 fork 本仓库(~~star watch 三连当然更好啦~~), 已经 fork 过则跳过这一步
+
+![fork](img/how-to-pr/fork.png)
+
+3. 打开 [首页](https://github.com/), 打开你 fork 的仓库
+
+![home](img/how-to-pr/home.png)
+
+4. 如果上游代码有变动, 需要跟上游同步, 这个相对比较复杂, 所以建议直接打开 `https://github.com/<你的github用户名>/wechat-feeds/compare/main...hellodword:main`, 如果上游已更新, 则按照如下操作来更新你 fork 后的仓库
+
+![upstream-01](img/how-to-pr/upstream-01.png)
+![upstream-02](img/how-to-pr/upstream-02.png)
+![upstream-03](img/how-to-pr/upstream-03.png)
+![upstream-04](img/how-to-pr/upstream-04.png)
+
+5. 先在 list.csv 中查找以确定没有你需要添加的公众号, 再修改 list.csv
+    1. 直接在网页上拉到行尾添加, 以免破坏文件格式
+    2. 获取 `bizid`, 参见 [为什么选用 bizid](#为什么选用-bizid) 和 [如何获取 bizid](#如何获取-bizid)
     3. `name` 和 `bizid` 为必需, `description` 可留空, `description` 内如有双引号、换行、逗号时, 需要转义, 自行搜索转义方式
 
-3. pull request
+![list](img/how-to-pr/list.png)
+![edit](img/how-to-pr/edit.png)
+
+6. 认真添加完你需要的公众号后, 提交 commit, 注意按照图中的指示填写和操作, 会自动生成一个分支名, 请记下来, 然后点击 `Propose changes` 提交 commit, 点击跳转之后直接去第7步
+
+![commit](img/how-to-pr/commit.png)
+
+7. 一切顺利的话就可以提交 pr 给上游也就是本仓库了, 直接打开 `https://github.com/hellodword/wechat-feeds/compare/main...<你的github用户名>:<第6步记下来的分支名>`
+
+![pr-01](img/how-to-pr/pr-01.png)
+![pr-02](img/how-to-pr/pr-02.png)
+
+8. 接下来你就可以通过 github 或者 Email 查看这个 pr 是否被合并, 或者是否被要求更改
+
+![email](img/how-to-pr/email.png)
+
+
+
 
 
 
