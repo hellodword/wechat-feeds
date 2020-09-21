@@ -3,6 +3,7 @@
 > 给微信公众号生成 RSS 订阅源
 
 * [WeChat-Feeds](#wechat-feeds)
+   * [声明](#声明)
    * [如何使用](#如何使用)
    * [如何添加/修改公众号](#如何添加修改公众号)
    * [FAQ](#faq)
@@ -14,12 +15,18 @@
       * [是否有隐私风险?](#是否有隐私风险)
       * [是如何爬取的?](#是如何爬取的)
       * [国内加速](#国内加速)
+      * [csv 转义方式](#csv-转义方式)
    * [结构](#结构)
       * [main](#main)
       * [feeds](#feeds)
    * [TODO](#todo)
 
 众所周知, 微信公众号比较封闭, 爬取也有一定门槛, 对于 RSS 重度用户来说很不友好, 加上如今订阅号的推送也是乱序时间轴的, 作为在推荐算法的重重包围下做挣扎的一员, 希望在此借助 Github 为同好提供有限的订阅服务.
+
+---
+## 声明
+
+收录的公众号均来自网友提交或者公开榜单, 不代表任何立场; 内容均为手动抄录, 未进行任何逆向工程.
 
 --- 
 ## 如何使用
@@ -57,10 +64,10 @@
 ![upstream-03](img/how-to-pr/upstream-03.png)
 ![upstream-04](img/how-to-pr/upstream-04.png)
 
-5. 先在 list.csv 中查找以确定没有你需要添加的公众号, 再修改 list.csv
+5. 先在 list.csv 中查找以确定没有你需要添加的公众号, 再修改 list.csv (可以一次性添加多个, 但同一个pr里不建议超过20个, 可以多次提交pr)
     1. 直接在网页上拉到行尾添加, 以免破坏文件格式
     2. 获取 `bizid`, 参见 [为什么选用 bizid](#为什么选用-bizid) 和 [如何获取 bizid](#如何获取-bizid)
-    3. `name` 和 `bizid` 为必需, `description` 可留空, `description` 内如有双引号、换行、逗号时, 需要转义, 自行搜索转义方式
+    3. `name` 和 `bizid` 为必需, `description` 可留空, `description` 内如有半角双引号、换行、逗号时, 需要转义, 参见 [csv 转义方式](#csv-转义方式)
 
 ![list](img/how-to-pr/list.png)
 ![edit](img/how-to-pr/edit.png)
@@ -124,6 +131,62 @@ feeds 托管在 github 上, 我无法获取订阅这些 feeds 的用户的任何
 [`https://gitee.com/BlogZ/wechat-feeds/raw/feeds/MzIzNDE3NjI0MQ==.xml`](https://gitee.com/BlogZ/wechat-feeds/raw/feeds/MzIzNDE3NjI0MQ==.xml)
 
 
+### csv 转义方式
+
+**首先确保你的输入法切换到半角符号状态**
+
+
+1. 如果内容中有**半角**双引号, 需要在每个**半角**双引号前面再加一个**半角**双引号来转义, 然后将内容用一对**半角**双引号包起来:
+
+   假设需要转义的内容为: 
+
+   ```
+   它说:"你好"
+   ```
+
+   则改为: 
+
+   ```
+   "它说:""你好"""
+   ```
+
+2. 如果内容中有**半角**逗号, 将内容用一对**半角**双引号包起来:
+
+   假设需要转义的内容为: 
+
+   ```
+   你好,世界
+   ```
+
+   则改为: 
+
+   ```
+   "你好,世界"
+   ```
+
+3. 如果内容中有换行, 要将整个内容都用一对**半角**双引号包起来:
+
+   > 不建议包含换行
+
+   假设需要转义的内容为: 
+
+   ```
+   它说:"你好世界"
+   它说:"知道了"
+   ```
+
+   则改为: 
+
+   ```
+   "它说:""你好世界""
+   它说:""知道了"""
+   ```
+
+
+
+
+
+
 ---
 
 ## 结构
@@ -153,3 +216,6 @@ feeds 托管在 github 上, 我无法获取订阅这些 feeds 的用户的任何
 - [ ] 添加 item description
 - [ ] 思考更简单的添加公众号的方式, 前提是继续控制成本
 - [ ] 思考如何用低成本实现添加全文
+- [ ] 给 pr 和 commit 添加自动 checks
+- [ ] 思考分类
+- [ ] 考虑 feeds 分支使用 force push, 以避免触及[仓库容量预警上限](https://docs.github.com/cn/github/managing-large-files/what-is-my-disk-quota#file-and-repository-size-limitations)
