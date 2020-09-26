@@ -44,44 +44,37 @@
 ---
 ## 如何添加/修改公众号
 
-> fork -> 修改 list.csv -> pull request  
-> 本指南只针对不是很熟悉 github 的朋友, 老手可忽略~
+> 本指南只针对不是很熟悉 github 的朋友, 方便大家直接在网页上提交 pr, 老手可忽略~
 
-1. 首先要有一个 github 账户: [注册](https://github.com/join?source=login)  [登录](https://github.com/login)
+1. 首先要有一个 github 账户: [注册](https://github.com/join?source=login) | [登录](https://github.com/login)
 
-2. 登录后如下图 fork 本仓库(~~star watch 三连当然更好啦~~), 已经 fork 过则跳过这一步
+2. 如果你不熟悉 GitHub 同步上游的操作, 就先在浏览器中打开 `https://github.com/<你的github用户名>/wechat-feeds/settings#danger-zone`, **如果能成功访问没有 404**, 说明你之前 fork 过, 则点击 `Delete this repository` 并按照提示操作来删除你 fork 后的仓库. **同时这也是接下来每一步操作遇到问题的终极解决办法**.
 
-![fork](img/how-to-pr/fork.png)
+![delete](img/how-to-pr/delete.png)
 
-3. 打开 [首页](https://github.com/), 打开你 fork 的仓库
+3. 在浏览器中打开 [list.csv](https://github.com/hellodword/wechat-feeds/blob/main/list.csv), 先搜索有没有你需要的公众号, 确定没有则点击箭头指示的编辑按钮, 开始编辑
 
-![home](img/how-to-pr/home.png)
+![edit-01](img/how-to-pr/edit-01.png)
 
-4. 如果上游代码有变动, 需要跟上游同步, 这个相对比较复杂, 所以建议直接打开 `https://github.com/<你的github用户名>/wechat-feeds/compare/main...hellodword:main`, 如果上游已更新, 则按照如下操作来更新你 fork 后的仓库
+4. **注意事项**:
+   1. 可以一次性添加多个, 但同一个pr里不建议超过20个, 可以多次提交pr.
+   2. 请确认自己的输入法, 分隔的标点符号为半角符号, 而不是全角符号, 区别请自行搜索
+   3. 直接在网页上拉到行尾添加, 以免破坏文件格式
+   4. 获取 `bizid`, 参见 [如何获取 bizid](#如何获取-bizid)
+   5. `name` 和 `bizid` 为必需, `description` 可留空, `description` 内如有半角双引号、换行、逗号时, 需要转义, 参见 [csv 转义方式](#csv-转义方式)
 
-![upstream-01](img/how-to-pr/upstream-01.png)
-![upstream-02](img/how-to-pr/upstream-02.png)
-![upstream-03](img/how-to-pr/upstream-03.png)
-![upstream-04](img/how-to-pr/upstream-04.png)
 
-5. 先在 list.csv 中查找以确定没有你需要添加的公众号, 再修改 list.csv (可以一次性添加多个, 但同一个pr里不建议超过20个, 可以多次提交pr)
-    1. 直接在网页上拉到行尾添加, 以免破坏文件格式
-    2. 获取 `bizid`, 参见 [为什么选用 bizid](#为什么选用-bizid) 和 [如何获取 bizid](#如何获取-bizid)
-    3. `name` 和 `bizid` 为必需, `description` 可留空, `description` 内如有半角双引号、换行、逗号时, 需要转义, 参见 [csv 转义方式](#csv-转义方式)
+根据下图的箭头指示添加完成后, 点击 **`Propose changes`**
 
-![list](img/how-to-pr/list.png)
-![edit](img/how-to-pr/edit.png)
+![edit-02](img/how-to-pr/edit-02.png)
 
-6. 认真添加完你需要的公众号后, 提交 commit, 注意按照图中的指示填写和操作, 会自动生成一个分支名, 请记下来, 然后点击 `Propose changes` 提交 commit, 点击跳转之后直接去第7步
-
-![commit](img/how-to-pr/commit.png)
-
-7. 一切顺利的话就可以提交 pr 给上游也就是本仓库了, 直接打开 `https://github.com/hellodword/wechat-feeds/compare/main...<你的github用户名>:<第6步记下来的分支名>`
+5. 网页跳转后来到如下页面则说明修改成功了, 开始提交 pr
 
 ![pr-01](img/how-to-pr/pr-01.png)
 ![pr-02](img/how-to-pr/pr-02.png)
 
-8. 接下来你就可以通过 github 或者 Email 查看这个 pr 是否被合并, 或者是否被要求更改
+
+6. 接下来你就可以通过 github 或者 Email 查看这个 pr 是否被合并, 或者是否被要求更改
 
 ![email](img/how-to-pr/email.png)
 
@@ -188,11 +181,6 @@ feeds 托管在 github 上, 我无法获取订阅这些 feeds 的用户的任何
    "它说:""你好世界""
    它说:""知道了"""
    ```
-
-
-
-
-
 
 ---
 
