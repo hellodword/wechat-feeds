@@ -1,5 +1,7 @@
 # WeChat-Feeds
 
+<div align=center><img src="img/wechat.png" height="160" width="160" /></div>
+
 > 给微信公众号生成 RSS 订阅源
 
 * [WeChat-Feeds](#wechat-feeds)
