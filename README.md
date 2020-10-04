@@ -2,7 +2,9 @@
 
 <div align=center><img src="img/wechat.png" height="160" width="160" /></div>
 
-> 给微信公众号生成 RSS 订阅源
+> 给微信公众号生成 RSS 订阅源  
+
+> 列表页 [https://wechat.privacyhide.com/](https://wechat.privacyhide.com/)  
 
 * [WeChat-Feeds](#wechat-feeds)
    * [声明](#声明)
@@ -50,7 +52,7 @@
 
 1. 首先要有一个 github 账户: [注册](https://github.com/join?source=login) | [登录](https://github.com/login)
 
-2. 如果你不熟悉 GitHub 同步上游的操作, 就先在浏览器中打开 `https://github.com/<你的github用户名>/wechat-feeds/settings#danger-zone`, **如果能成功访问没有 404**, 说明你之前 fork 过, 则点击 `Delete this repository` 并按照提示操作来删除你 fork 后的仓库. **同时这也是接下来每一步操作遇到问题的终极解决办法**.
+2. 如果你不熟悉 GitHub 同步上游的操作, 就先在浏览器中打开 `https://github.com/<你的github用户名>/wechat-feeds/settings#danger-zone`, **如果能成功访问没有 404**, 说明你之前 fork 过, 则点击 `Delete this repository` 并按照提示操作来删除你 fork 后的仓库. **同时这也是接下来每一步操作遇到问题时的通用解决办法**.
 
 ![delete](img/how-to-pr/delete.png)
 
@@ -209,7 +211,7 @@ feeds 托管在 github 上, 我无法获取订阅这些 feeds 的用户的任何
 ## TODO
 
 - [x] 同步 gitee 提升访问体验
-- [ ] 根据 list.csv 生成精美一些的列表页, 通过 pages 展示
+- [x] 根据 list.csv 生成列表页, 通过 pages 展示
 - [ ] 添加 item description
 - [ ] 思考更简单的添加公众号的方式, 前提是继续控制成本
 - [ ] 思考如何用低成本实现添加全文
