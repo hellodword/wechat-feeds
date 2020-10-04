@@ -2,16 +2,11 @@
 
 <div align=center><img src="img/wechat.png" height="160" width="160" /></div>
 
-> 给微信公众号生成 RSS 订阅源  
-
-> 列表页 [https://wechat.privacyhide.com/](https://wechat.privacyhide.com/)  
-
 * [WeChat-Feeds](#wechat-feeds)
    * [声明](#声明)
    * [如何使用](#如何使用)
    * [如何添加/修改公众号](#如何添加修改公众号)
    * [FAQ](#faq)
-      * [为什么选用 bizid?](#为什么选用-bizid)
       * [如何获取 bizid?](#如何获取-bizid)
       * [服务是否稳定?](#服务是否稳定)
       * [feeds 更新频率如何?](#feeds-更新频率如何)
@@ -22,14 +17,22 @@
    * [结构](#结构)
       * [main](#main)
       * [feeds](#feeds)
+      * [pages](#pages)
    * [TODO](#todo)
+   * [捐赠](#捐赠)
+
+---
+
+> 给微信公众号生成 RSS 订阅源  
+
+> 列表页 [https://wechat.privacyhide.com/](https://wechat.privacyhide.com/)  
 
 众所周知, 微信公众号比较封闭, 爬取也有一定门槛, 对于 RSS 重度用户来说很不友好, 加上如今订阅号的推送也是乱序时间轴的, 作为在推荐算法的重重包围下做挣扎的一员, 希望在此借助 Github 为同好提供有限的订阅服务.
 
 ---
 ## 声明
 
-收录的公众号均来自网友提交或者公开榜单, 不代表任何立场; 内容均为手动抄录, 未进行任何逆向工程.
+收录的公众号均来自网友提交或者采集自公开榜单, 不代表任何立场; 所有内容均为手动抄录, 未进行任何逆向工程.
 
 --- 
 ## 如何使用
@@ -80,10 +83,6 @@
 
 ## FAQ
 
-### 为什么选用 bizid?
-
-因为公众号名称或者是微信号都是可以修改的, 而其它的唯一ID对于普通用户来说比较难获取, 或许未来可以考虑做一个插件来直接获取公众号真正的唯一ID
-
 ### 如何获取 bizid?
 
 #### 自动获取
@@ -102,7 +101,7 @@
 
 ### 服务是否稳定?
 
-完全不敢保证, 抱歉
+完全不敢保证, 抱歉 (项目的特殊性决定了一切说绝对稳定的都是过度自信)
 
 ### feeds 更新频率如何?
 
@@ -112,7 +111,7 @@
 
 01,07,11,13,16,20,23
 
-如果有更好的时间点设计欢迎issue告诉我, 因为凌晨这段时间推送的更新很少, 抓取有点浪费
+如果有更好的时间点设计欢迎 issue 告诉我, 因为凌晨这段时间推送的更新很少, 抓取有点浪费
 
 
 ### 数量是否有上限?
@@ -214,3 +213,27 @@ feeds 托管在 github 上, 我无法获取订阅这些 feeds 的用户的任何
 - [ ] 思考更简单的添加公众号的方式, 前提是继续控制成本
 - [ ] 思考如何用低成本实现添加全文(格式处理/IP限制/静态资源限制等问题有点麻烦, 成本很难控制)
 - [ ] 考虑 feeds 分支使用 force push, 以避免触及[仓库容量预警上限](https://docs.github.com/cn/github/managing-large-files/what-is-my-disk-quota#file-and-repository-size-limitations)
+
+---
+
+## 捐赠
+
+本项目使用完全免费. 但有一定的维护成本, 故此处开放捐赠, 但不对捐赠者做任何关于本项目的额外的承诺, 亦不会在项目中主动公开捐赠者信息. 
+
+
+<details>
+<summary>展开查看捐赠方式</summary>
+
+<h3>BTC</h3>
+<img src="img/sponsor/btc.jpg" />
+
+<h3>ETH (ERC20)</h3>
+<img src="img/sponsor/eth-erc20.jpg" />
+
+<h3>USDT (ERC20)</h3>
+<img src="img/sponsor/usdt-erc20.jpg" />
+
+<h3>XMR</h3>
+<img src="img/sponsor/xmr.jpg" />
+
+</details>
