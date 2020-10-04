@@ -1,0 +1,79 @@
+name: fetch bizid with github actions
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  format:
+    name: format check
+    runs-on: ubuntu-latest
+    if: |
+      startsWith(github.event.issue.body, 'https://mp.weixin.qq.com/s') || startsWith(github.event.issue.body, 'http://mp.weixin.qq.com/s')
+    steps:
+      - name: check format
+        run: echo "checked body ${{ github.event.issue.body }}"
+  issue-auto-label:
+    name: issues auto label
+    needs: format
+    runs-on: ubuntu-latest
+    if: |
+      github.event_name == 'issues' && github.event.action == 'opened'
+    steps:
+      - uses: actions/github-script@0.4.0
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            github.issues.addLabels({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              labels: ['fetch']
+            })
+  issue:
+    name: issue execute
+    needs: format
+    runs-on: ubuntu-latest
+    steps:
+      - name: fetch
+        id: fetch
+        run: |
+          sudo apt-get install curl unzip
+          wget -q https://github.com/ericchiang/pup/releases/download/v0.4.0/pup_v0.4.0_linux_amd64.zip
+          unzip -qq pup_v0.4.0_linux_amd64.zip
+          sudo chmod a+x ./pup
+          url=$(echo "${{ github.event.issue.body }}" | head -1)
+          response=$(curl -s ${url})
+          bizid=$(echo "${response}" | grep -oP '(?<=var appuin)([ "=\|]+)([a-zA-Z\d\/]+=*)' | grep -oP '(?<=")([a-zA-Z\d\/]+=*)')
+          if [ -z "${bizid}" ];then
+            echo "no bizid ${url}"
+            exit 1
+          fi
+          nickname=$(echo "${response}" | grep -oP '(?<=var nickname)([ "=]+)([^"\n]+)' | grep -oP '(?<=")[^"\n]+')
+          if [ -z "${nickname}" ];then
+            nickname=$(echo ${response} | ./pup '#js_profile_qrcode > div > strong text{}')
+          fi
+          if [ -z "${nickname}" ];then
+            echo "no nickname ${url}"
+            exit 1
+          fi
+          description=$(echo ${response} | ./pup '#js_profile_qrcode > div > p:nth-child(4) > span text{}')
+          echo "${nickname},${bizid},\"${description}\""
+          echo ::set-output name=fetchresult::$(echo "${nickname},${bizid},\\\"${description}\\\"")
+          echo ::set-output name=bizid::$(echo "${bizid}")
+
+      - uses: actions/github-script@0.4.0
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            github.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: "\`${{ steps.fetch.outputs.fetchresult }}\`\n\n[RSS链接](https://github.com/hellodword/wechat-feeds/raw/feeds/${{ steps.fetch.outputs.bizid }}.xml) | [国内链接](https://gitee.com/BlogZ/wechat-feeds/raw/feeds/${{ steps.fetch.outputs.bizid }}.xml)"
+            })
+            github.issues.update({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: "closed"
+            })

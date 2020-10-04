@@ -18,7 +18,6 @@
       * [数量是否有上限?](#数量是否有上限)
       * [是否有隐私风险?](#是否有隐私风险)
       * [是如何爬取的?](#是如何爬取的)
-      * [国内加速](#国内加速)
       * [csv 转义方式](#csv-转义方式)
    * [结构](#结构)
       * [main](#main)
@@ -37,13 +36,7 @@
 
 1. 所有 feeds 将采用 [Atom](https://tools.ietf.org/html/rfc4287) 标准, 请确保你的 RSS 订阅工具支持这种标准  
 
-2. 在 [list.csv](https://github.com/hellodword/wechat-feeds/blob/main/list.csv) 中查找名称, 或者根据 `bizid` 查找会最精准, 参见 [如何获取 bizid](#如何获取-bizid). 例如:
-
-   1. [虎克老湿基](https://github.com/hellodword/wechat-feeds/raw/feeds/MzIzNDE3NjI0MQ==.xml) 的 `bizid` 为 `MzIzNDE3NjI0MQ==`, 则其 feed 为 [`https://github.com/hellodword/wechat-feeds/raw/feeds/MzIzNDE3NjI0MQ==.xml`](https://github.com/hellodword/wechat-feeds/raw/feeds/MzIzNDE3NjI0MQ==.xml)
-
-   2. [社会扶贫](https://github.com/hellodword/wechat-feeds/raw/feeds/MzI1NTQxODA4NA==.xml) 的 `bizid` 为 `MzI1NTQxODA4NA==`, 则其 feed 为 [`https://github.com/hellodword/wechat-feeds/raw/feeds/MzI1NTQxODA4NA==.xml`](https://github.com/hellodword/wechat-feeds/raw/feeds/MzI1NTQxODA4NA==.xml)
-
-3. 以上为 github 上的地址, 国内访问参见 [国内加速](#国内加速)
+2. 在 [列表页](https://wechat.privacyhide.com/) 中搜索你想要订阅的公众号, 点击复制链接
 
 ---
 ## 如何添加/修改公众号
@@ -93,9 +86,17 @@
 
 ### 如何获取 bizid?
 
+#### 自动获取
+
 1. 选择一篇文章复制链接
 
 ![](img/bizid-01.png)
+
+2. 在 [这里](https://github.com/hellodword/wechat-feeds/issues/new) 新开一个 issue, 填上链接, github actions 会自动抓取和回复数据, 只需要等待几十秒然后复制就可以了. 参考 [#29](https://github.com/hellodword/wechat-feeds/issues/29). 如果失败, 请 [手动获取](#手动获取)
+
+#### 手动获取
+
+1. 选择一篇文章复制链接
 
 2. 在浏览器中打开链接, 右键查看网页源代码, 搜索 `var biz`, 可以搜到 `var biz = ""||"MzI1NTQxODA4NA==";`, 那么 `MzI1NTQxODA4NA==` 也就是需要的 bizid
 
@@ -125,15 +126,6 @@ feeds 托管在 github 上, 我无法获取订阅这些 feeds 的用户的任何
 ### 是如何爬取的?
 
 真实: 全部是我一条一条定时手动抄录的, 一个小时最多抄录两万个公众号的内容.
-
-### 国内加速
-
-已将 feeds 分支同步更新到 [gitee](https://gitee.com/BlogZ/wechat-feeds), 所以只需要改变地址的前半部分, 例如:  
-[`https://github.com/hellodword/wechat-feeds/raw/feeds/MzIzNDE3NjI0MQ==.xml`](https://github.com/hellodword/wechat-feeds/raw/feeds/MzIzNDE3NjI0MQ==.xml)  
-
-对应的国内加速地址为:  
-[`https://gitee.com/BlogZ/wechat-feeds/raw/feeds/MzIzNDE3NjI0MQ==.xml`](https://gitee.com/BlogZ/wechat-feeds/raw/feeds/MzIzNDE3NjI0MQ==.xml)
-
 
 ### csv 转义方式
 
@@ -207,14 +199,18 @@ feeds 托管在 github 上, 我无法获取订阅这些 feeds 的用户的任何
 
 分支 `feeds` 将储存更新的 feeds
 
+### pages
+
+分支 `pages` 是列表页的源码, 部署在 github pages 上
+
 ---
 ## TODO
 
 - [x] 同步 gitee 提升访问体验
 - [x] 根据 list.csv 生成列表页, 通过 pages 展示
-- [ ] 添加 item description
-- [ ] 思考更简单的添加公众号的方式, 前提是继续控制成本
-- [ ] 思考如何用低成本实现添加全文
 - [ ] 给 pr 和 commit 添加自动 checks
-- [ ] 思考分类
+- [x] 给 issue 添加 actions, 来自动获取 bizid 等
+- [ ] 考虑添加更多可供列表页搜索/过滤的属性, 例如微信号、 TAG 等
+- [ ] 思考更简单的添加公众号的方式, 前提是继续控制成本
+- [ ] 思考如何用低成本实现添加全文(格式处理/IP限制/静态资源限制等问题有点麻烦, 成本很难控制)
 - [ ] 考虑 feeds 分支使用 force push, 以避免触及[仓库容量预警上限](https://docs.github.com/cn/github/managing-large-files/what-is-my-disk-quota#file-and-repository-size-limitations)
