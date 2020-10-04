@@ -35,8 +35,10 @@
             @click="switchsource"><i class="mdui-icon material-icons">&#xe835;</i></a>
           <a v-show="!github" href="javascript:;" mdui-tooltip="{content: '切换全球'}" class="mdui-btn mdui-btn-icon"
             @click="switchsource"><i class="mdui-icon material-icons">&#xe834;</i></a>
-          <a href="javascript:;" mdui-tooltip="{content: '搜索'}" class="mdui-btn mdui-btn-icon" @click="search"><i
-              class="mdui-icon material-icons">search</i></a>
+          <!-- <a href="javascript:;" mdui-tooltip="{content: '搜索'}" class="mdui-btn mdui-btn-icon" @click="search"><i
+              class="mdui-icon material-icons">search</i></a> -->
+            <a href="javascript:;" mdui-tooltip="{content: '返回顶部'}" class="mdui-btn mdui-btn-icon" @click="backTop"><i class="mdui-icon material-icons">arrow_upward</i></a>
+
           <a href="javascript:;" mdui-tooltip="{content: '刷新'}" class="mdui-btn mdui-btn-icon" @click="refresh"><i
               class="mdui-icon material-icons">refresh</i></a>
           <a href="javascript:;" mdui-tooltip="{content: '帮助'}" class="mdui-btn mdui-btn-icon" @click="showhelp"><i
@@ -80,8 +82,19 @@
     </div>
     <div v-else class="">
 
+
+      <!-- 搜索 -->
+      <div class="mdui-p-y-3">
+        <div class="mdui-textfield mdui-textfield-expandable mdui-textfield-expanded search">
+          <button class="mdui-textfield-icon mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">search</i></button>
+          <input class="mdui-textfield-input" type="text" placeholder="Search" v-model="key" @input="search()"  />
+          <button class="mdui-btn mdui-btn-icon search-input-clear"  @click="key=''"><i class="mdui-icon material-icons">close</i></button>
+        </div>
+      </div>
+      <div class="mdui-divider"></div>
+
       <div class="list mdui-list">
-        <block v-for="(item,i) in listdata" :key="i">
+        <block v-for="(item,i) in (key?searchResults:listdata)" :key="i">
           <ul class="mdui-list mdui-list-dense">
             <li class="mdui-list-item mdui-ripple">
               <div class="mdui-list-item-avatar">
@@ -123,6 +136,19 @@
       });
     }
 
+    // 防抖
+    function debounce(fn, delay = 500) {
+        let timer = null;
+        return function (...args) {
+          let that = this;
+          clearTimeout(timer);
+          timer = setTimeout(() => {
+            fn.call(that, ...args);
+          }, delay);
+        };
+      }
+
+
     let clipboard_;
     const vm = new Vue({
       el: "#app",
@@ -131,6 +157,13 @@
           github: true,
           isloading: true,
           listdata: [{}, {}, {}],
+
+          // 搜索
+          key: "",
+            searchResults: [],
+            search: debounce(() => {
+              this.searchResults = this.selectMatchItems(this.listdata, this.key);
+            }),
         };
       },
       created() {
@@ -162,6 +195,11 @@
         });
       },
       methods: {
+        selectMatchItems(list, key) {
+            return list.filter(item => {
+              return (item['name']||'').indexOf(key)>-1||(item['desc']||'').indexOf(key)>-1
+            });
+          },
         showhelp() {
           var inst = new mdui.Dialog('#help');
           inst.open();
@@ -182,6 +220,9 @@
           mdui.snackbar({
             message: this.github ? '已切换到全球' : '已切换到国内',
           });
+        },
+        backTop(){
+          window.scrollTo({top:1,behavior:"smooth"});
         },
         copy(text) {
           let button = document.createElement("button");

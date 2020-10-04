@@ -36,3 +36,12 @@
     margin: 10px 0;
     color: gray;
 }
+.search{
+    position: relative;
+}
+
+.mdui-btn-icon.search-input-clear{
+    position: absolute;
+    right: 0px;
+    top: 0;
+}
