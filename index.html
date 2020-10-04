@@ -63,6 +63,9 @@
         编写
         <br>
         <br>
+        当前总数: {{listdata.length}}
+        <br>
+        <br>
         右上角的工具栏可以切换国内或者全球
       </div>
       <div class="mdui-dialog-actions">
@@ -78,7 +81,7 @@
     <div v-else class="">
 
       <div class="list mdui-list">
-        <block v-for="(item,i) in list" :key="i">
+        <block v-for="(item,i) in listdata" :key="i">
           <ul class="mdui-list mdui-list-dense">
             <li class="mdui-list-item mdui-ripple">
               <div class="mdui-list-item-avatar">
@@ -127,7 +130,7 @@
         return {
           github: true,
           isloading: true,
-          list: [{}, {}, {}],
+          listdata: [{}, {}, {}],
         };
       },
       created() {
@@ -154,7 +157,7 @@
               }
               return 0;
             });
-            this.list = res;
+            this.listdata = res;
           });
         });
       },
