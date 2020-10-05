@@ -122,6 +122,8 @@
 
 feeds 托管在 github 上, 我无法获取订阅这些 feeds 的用户的任何信息
 
+2020/10/5: 在列表页新增了 [GA](https://github.com/hellodword/wechat-feeds/blob/82c14ebd869fe11618142d9a04b487b53988dd3e/index.html#L22-L30), 只是为了统计一下列表页的使用情况, 如有介意, 可以使用 [list.csv](https://github.com/hellodword/wechat-feeds/blob/main/list.csv) 代替列表页.
+
 ### 是如何爬取的?
 
 真实: 全部是我一条一条定时手动抄录的, 一个小时最多抄录两万个公众号的内容.
@@ -183,30 +185,23 @@ feeds 托管在 github 上, 我无法获取订阅这些 feeds 的用户的任何
 
 
 ### main
-主分支 `main` 的结构:
+主分支 `main`:
 
-```
-.
-├── README.md
-└── list.csv
-```
-
-1. [README.md](https://github.com/hellodword/wechat-feeds/blob/main/README.md)
-2. [list.csv](https://github.com/hellodword/wechat-feeds/blob/main/list.csv): 待爬取的列表, 由 `name`, `bizid`, `description` 组成的无序列表
+1. [list.csv](https://github.com/hellodword/wechat-feeds/blob/main/list.csv): 由 `name`, `bizid`, `description` 组成的无序公众号列表
 
 ### feeds
 
-分支 `feeds` 将储存更新的 feeds
+分支 `feeds` 储存更新的 feeds
 
 ### pages
 
-分支 `pages` 是列表页的源码, 部署在 github pages 上
+分支 `pages` 是列表页的源码, 部署在 github pages 上, 其中的 [VERSION](https://github.com/hellodword/wechat-feeds/blob/pages/VERSION) 文件会随着 [feeds 分支](#feeds) 自动更新.
 
 ---
 ## TODO
 
 - [x] 同步 gitee 提升访问体验
-- [x] 根据 list.csv 生成列表页, 通过 pages 展示
+- [x] 根据 list.csv 生成列表页, 通过 pages 展示 (感谢 [Treblex](https://github.com/Treblex) 的 [Treblex/wechat-feeds-page](https://github.com/Treblex/wechat-feeds-page))
 - [ ] 给 pr 和 commit 添加自动 checks
 - [x] 给 issue 添加 actions, 来自动获取 bizid 等
 - [ ] 考虑添加更多可供列表页搜索/过滤的属性, 例如微信号、 TAG 等
