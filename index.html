@@ -6,7 +6,12 @@
     href="data:image/x-icon;base64,AAABAAEAEBAAAAEAIABoBAAAFgAAACgAAAAQAAAAIAAAAAEAIAAAAAAAAAQAAMMOAADDDgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACQc7AUkHOwFAAAAAAAAAAAkHOwQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAkHOwwJBzsoiQc7PkkHOz+JBzs7iQc7L0kHOzgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAkHOxfJBzs/yQc7P8kHOz/JBzs/yQc7P8kHOz/JBzs/yQc7I8AAAAAAAAAAAAAAAAkHOx/JBzsMCQc7EAkHOwSJBzs/yQc7P8kHOz/JBzs/yQc7P8kHOz/JBzs/yQc7P8kHOz/JBzsPwAAAAAAAAAAJBzsbyQc7P8kHOzyJBzsZyQc7P8kHOz/JBzs/yQc7P8kHOz/JBzs/yQc7P8kHOz/JBzs/yQc7IwAAAAAJBzsQCQc7P8kHOz/JBzs/yQc7HUkHOz/JBzs/yQc7H4kHOzJJBzs/yQc7OwkHOxAJBzs/yQc7P8kHOxwJBzsECQc7P8kHOz/JBzs/yQc7P8kHOx0JBzs4iQc7P8hMO79JBzs/yQc7P8kHOz/JBzs/yQc7P8kHOzvJBzsGyQc7GgkHOz/JBzs/yQc7P8kHOz/JBzs7yQc7GUjJO3aIivt/yQc7P8kHOz/JBzs/yQc7P8kHOzZJBzsNwAAAAAkHOyBJBzs/yQc7P8kHOz/JBzs/yQc7P8kHOzvJBzsfyQc7HQkHOytJBzsvyQc7KckHOxjJBzsDwAAAAAAAAAAJBzsVCQc7P8kHOz/JBzs/yQc7NAkHOz6JBzs/yQc7P8kHOzfJBzsryQc7K8kHOy6JBzs8SQc7BUAAAAAAAAAACQc7BAkHOzPJBzs/yQc7P8kHOxhJBzs8CQc7P8kHOz/JBzsryQc7J4kHOz/JBzs/yQc7KgAAAAAAAAAAAAAAAAAAAAAJBzsMCQc7OEkHOz/Iibt/yMk7f8kHOz/JBzs/yQc7P8kHOz/JBzs/yQc7M8kHOkCAAAAAAAAAAAAAAAAAAAAAAAAAAAkHOwQJBzsjyEv7u8jJO3/JBzs/yQc7P8kHOz/JBzs/yQc7I8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAkHOwQJBzsQyQc7GEkHOxhJBzsQgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//8AAP/NAAD+AwAA/AEAAMAAAADAAAAAgAAAAAAAAAAAAQAAAAMAAAADAAAABwAAgAcAAMAfAADwfwAA//8AAA==" />
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>给微信公众号生成 RSS 订阅源</title>
+  <title data-n-head="true">给微信公众号生成 RSS 订阅源 - wechat-feeds</title>
+  <meta name="description" content="给微信公众号生成RSS订阅源" />
+  <meta
+    content="wechat-feeds,微信公众号RSS订阅,微信公众号RSS,微信公众号订阅,微信公众号,微信公众号文章订阅,微信公众号文章,公众号RSS订阅,公众号RSS,微信rss订阅源地址,微信rss订阅源,微信rss聚合,微信rss生成,微信公众号文章提取,公众号文章导出,微信公众号文章导出,公众号rss订阅源地址,公众号rss源,公众号rss生成器,微信公众号更新提醒"
+    name="keywords" data-n-head="true">
+
   <link rel="stylesheet" href="./static/css/style.css" />
   <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12"></script>
   <script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js"></script>
@@ -14,6 +19,15 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mdui@1.0.0/dist/css/mdui.min.css"
     integrity="sha384-2PJ2u4NYg6jCNNpv3i1hK9AoAqODy6CdiC+gYiL2DVx+ku5wzJMFNdE3RoWfBIRP" crossorigin="anonymous" />
 
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-176067962-2"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', 'UA-176067962-2');
+  </script>
 </head>
 
 <body class="mdui-container-fluid mdui-typo mdui-appbar-with-toolbar">
@@ -37,7 +51,8 @@
             @click="switchsource"><i class="mdui-icon material-icons">&#xe834;</i></a>
           <!-- <a href="javascript:;" mdui-tooltip="{content: '搜索'}" class="mdui-btn mdui-btn-icon" @click="search"><i
               class="mdui-icon material-icons">search</i></a> -->
-            <a href="javascript:;" mdui-tooltip="{content: '返回顶部'}" class="mdui-btn mdui-btn-icon" @click="backTop"><i class="mdui-icon material-icons">arrow_upward</i></a>
+          <a href="javascript:;" mdui-tooltip="{content: '返回顶部'}" class="mdui-btn mdui-btn-icon" @click="backTop"><i
+              class="mdui-icon material-icons">arrow_upward</i></a>
 
           <a href="javascript:;" mdui-tooltip="{content: '刷新'}" class="mdui-btn mdui-btn-icon" @click="refresh"><i
               class="mdui-icon material-icons">refresh</i></a>
@@ -68,7 +83,11 @@
         当前总数: {{listdata.length}}
         <br>
         <br>
-        右上角的工具栏可以切换国内或者全球
+        顶部的工具栏可以切换国内或者全球源地址
+        <br>
+        <br>
+        <a href="https://github.com/hellodword/wechat-feeds#%E5%A6%82%E4%BD%95%E6%B7%BB%E5%8A%A0%E4%BF%AE%E6%94%B9%E5%85%AC%E4%BC%97%E5%8F%B7"
+          target="_blank"><b>没有你想要的公众号？点这里去新增</b></a>
       </div>
       <div class="mdui-dialog-actions">
         <button class="mdui-btn mdui-ripple" mdui-dialog-cancel>确定</button>
@@ -86,9 +105,11 @@
       <!-- 搜索 -->
       <div class="mdui-p-y-3">
         <div class="mdui-textfield mdui-textfield-expandable mdui-textfield-expanded search">
-          <button class="mdui-textfield-icon mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">search</i></button>
-          <input class="mdui-textfield-input" type="text" placeholder="Search" v-model="key" @input="search()"  />
-          <button class="mdui-btn mdui-btn-icon search-input-clear"  @click="key=''"><i class="mdui-icon material-icons">close</i></button>
+          <button class="mdui-textfield-icon mdui-btn mdui-btn-icon"><i
+              class="mdui-icon material-icons">search</i></button>
+          <input class="mdui-textfield-input" type="text" placeholder="Search" v-model="key" @input="search()" />
+          <button class="mdui-btn mdui-btn-icon search-input-clear" @click="key=''"><i
+              class="mdui-icon material-icons">close</i></button>
         </div>
       </div>
       <div class="mdui-divider"></div>
@@ -138,15 +159,15 @@
 
     // 防抖
     function debounce(fn, delay = 500) {
-        let timer = null;
-        return function (...args) {
-          let that = this;
-          clearTimeout(timer);
-          timer = setTimeout(() => {
-            fn.call(that, ...args);
-          }, delay);
-        };
-      }
+      let timer = null;
+      return function (...args) {
+        let that = this;
+        clearTimeout(timer);
+        timer = setTimeout(() => {
+          fn.call(that, ...args);
+        }, delay);
+      };
+    }
 
 
     let clipboard_;
@@ -160,10 +181,10 @@
 
           // 搜索
           key: "",
-            searchResults: [],
-            search: debounce(() => {
-              this.searchResults = this.selectMatchItems(this.listdata, this.key);
-            }),
+          searchResults: [],
+          search: debounce(() => {
+            this.searchResults = this.selectMatchItems(this.listdata, this.key);
+          }),
         };
       },
       created() {
@@ -196,10 +217,10 @@
       },
       methods: {
         selectMatchItems(list, key) {
-            return list.filter(item => {
-              return (item['name']||'').indexOf(key)>-1||(item['desc']||'').indexOf(key)>-1
-            });
-          },
+          return list.filter(item => {
+            return (item['name'] || '').indexOf(key) > -1 || (item['description'] || '').indexOf(key) > -1
+          });
+        },
         showhelp() {
           var inst = new mdui.Dialog('#help');
           inst.open();
@@ -221,8 +242,8 @@
             message: this.github ? '已切换到全球' : '已切换到国内',
           });
         },
-        backTop(){
-          window.scrollTo({top:1,behavior:"smooth"});
+        backTop() {
+          window.scrollTo({ top: 1, behavior: "smooth" });
         },
         copy(text) {
           let button = document.createElement("button");
