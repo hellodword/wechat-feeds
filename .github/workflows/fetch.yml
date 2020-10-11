@@ -46,24 +46,34 @@ jobs:
         run: |
           url=$(echo "${{ github.event.issue.body }}" | head -1)
           echo "debug url ${url}"
-          response=$(curl -s -L "${url}")
+          response=$(curl -s -L "${url}") || true
+          echo "after response"
           if [[ "${response}" =~ "该公众号已迁移至新的帐号，原帐号已回收。若需访问原文章链接，请点击下方按钮。" ]]; then
-            url=$(echo "${response}" | grep -oP "(?<=transferTargetLink = ')http://mp.weixin.qq.com/[^'\n\r]+(?=')")
+            url=$(echo "${response}" | grep -oP "(?<=transferTargetLink = ')http://mp.weixin.qq.com/[^'\n\r]+(?=')") || true
             echo "debug url ${url}"
-            response=$(curl -s -L "${url}")
+            response=$(curl -s -L "${url}") || true
             echo "debug curl again"
           fi
-
-          bizid=$(echo "${response}" | grep -oP '(?<=var appuin)([ "=\|]+)([a-zA-Z\d\/]+=*)' | grep -oP '(?<=")([a-zA-Z\d\/]+=*)')
+          echo "after if"
+          bizid=$(echo "${response}" | grep -oP '(?<=var appuin)([ "=\|]+)([a-zA-Z\d\/]+=*)' | grep -oP '(?<=")([a-zA-Z\d\/]+=*)') || true
           echo "debug bizid ${bizid}"
-          nickname=$(echo "${response}" | grep -oP '(?<=var nickname)([ "=]+)([^"\n]+)' | grep -oP '(?<=")[^"\n]+')
-          echo "debug nickname ${nickname}"
-          if [ -z "${nickname}" ];then
-            nickname=$(echo ${response} | ./pup '#js_profile_qrcode > div > strong text{}')
+          if [ -z "${bizid}" ];then
+            bizid=$(echo "${response}" | grep -oP '(?<=__biz=)([a-zA-Z\d\/]+=*)' | head -1) || true
             echo "debug nickname ${nickname}"
           fi
 
-          description=$(echo ${response} | ./pup '#js_profile_qrcode > div > p:nth-child(4) > span text{}')
+          nickname=$(echo "${response}" | grep -oP '(?<=var nickname)([ "=]+)([^"\n]+)' | grep -oP '(?<=")[^"\n]+') || true
+          echo "debug nickname ${nickname}"
+          if [ -z "${nickname}" ];then
+            nickname=$(echo ${response} | ./pup '#js_profile_qrcode > div > strong text{}') || true
+            echo "debug nickname ${nickname}"
+          fi
+          if [ -z "${nickname}" ];then
+            nickname=$(echo "${response}" | grep -oP '(?<=nick_name)([ "=]+)([^"\n]+)' | grep -oP '(?<=")[^"\n]+') || true
+            echo "debug nickname ${nickname}"
+          fi
+
+          description=$(echo ${response} | ./pup '#js_profile_qrcode > div > p:nth-child(4) > span text{}') || true
 
           if [[ -z "${bizid}" ]] || [[ -z "${nickname}" ]]; then
             echo ::set-output name=status::$(echo "error")
