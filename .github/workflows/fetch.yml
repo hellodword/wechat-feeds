@@ -34,34 +34,51 @@ jobs:
     needs: format
     runs-on: ubuntu-latest
     steps:
-      - name: fetch
-        id: fetch
+      - name: install
         run: |
           sudo apt-get install curl unzip
           wget -q https://github.com/ericchiang/pup/releases/download/v0.4.0/pup_v0.4.0_linux_amd64.zip
           unzip -qq pup_v0.4.0_linux_amd64.zip
           sudo chmod a+x ./pup
+
+      - name: fetch
+        id: fetch
+        run: |
           url=$(echo "${{ github.event.issue.body }}" | head -1)
-          response=$(curl -s ${url})
-          bizid=$(echo "${response}" | grep -oP '(?<=var appuin)([ "=\|]+)([a-zA-Z\d\/]+=*)' | grep -oP '(?<=")([a-zA-Z\d\/]+=*)')
-          if [ -z "${bizid}" ];then
-            echo "no bizid ${url}"
-            exit 1
+          echo "debug url ${url}"
+          response=$(curl -s -L "${url}")
+          if [[ "${response}" =~ "该公众号已迁移至新的帐号，原帐号已回收。若需访问原文章链接，请点击下方按钮。" ]]; then
+            url=$(echo "${response}" | grep -oP "(?<=transferTargetLink = ')http://mp.weixin.qq.com/[^'\n\r]+(?=')")
+            echo "debug url ${url}"
+            response=$(curl -s -L "${url}")
+            echo "debug curl again"
           fi
+
+          bizid=$(echo "${response}" | grep -oP '(?<=var appuin)([ "=\|]+)([a-zA-Z\d\/]+=*)' | grep -oP '(?<=")([a-zA-Z\d\/]+=*)')
+          echo "debug bizid ${bizid}"
           nickname=$(echo "${response}" | grep -oP '(?<=var nickname)([ "=]+)([^"\n]+)' | grep -oP '(?<=")[^"\n]+')
+          echo "debug nickname ${nickname}"
           if [ -z "${nickname}" ];then
             nickname=$(echo ${response} | ./pup '#js_profile_qrcode > div > strong text{}')
+            echo "debug nickname ${nickname}"
           fi
-          if [ -z "${nickname}" ];then
-            echo "no nickname ${url}"
-            exit 1
-          fi
+
           description=$(echo ${response} | ./pup '#js_profile_qrcode > div > p:nth-child(4) > span text{}')
-          echo "${nickname},${bizid},\"${description}\""
-          echo ::set-output name=fetchresult::$(echo "${nickname},${bizid},\\\"${description}\\\"")
-          echo ::set-output name=bizid::$(echo "${bizid}")
+
+          if [[ -z "${bizid}" ]] || [[ -z "${nickname}" ]]; then
+            echo ::set-output name=status::$(echo "error")
+            echo "${url}"
+          else
+            echo "debug description ${description}"
+            echo ::set-output name=status::$(echo "ok")
+            echo "${nickname},${bizid},\"${description}\""
+            echo ::set-output name=fetchresult::$(echo "${nickname},${bizid},\\\"${description}\\\"")
+            echo ::set-output name=bizid::$(echo "${bizid}")
+          fi
 
       - uses: actions/github-script@0.4.0
+        if: |
+          steps.fetch.outputs.status == 'ok'
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
@@ -71,6 +88,24 @@ jobs:
               repo: context.repo.repo,
               body: "\`${{ steps.fetch.outputs.fetchresult }}\`\n\n[RSS链接](https://github.com/hellodword/wechat-feeds/raw/feeds/${{ steps.fetch.outputs.bizid }}.xml) | [国内链接](https://gitee.com/BlogZ/wechat-feeds/raw/feeds/${{ steps.fetch.outputs.bizid }}.xml)"
             })
+
+      - uses: actions/github-script@0.4.0
+        if: |
+          steps.fetch.outputs.status == 'error'
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            github.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: "自动抓取失败, 请尝试手动获取"
+            })
+
+      - uses: actions/github-script@0.4.0
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
             github.issues.update({
               issue_number: context.issue.number,
               owner: context.repo.owner,
