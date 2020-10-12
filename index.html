@@ -12,12 +12,12 @@
     content="wechat-feeds,微信公众号RSS订阅,微信公众号RSS,微信公众号订阅,微信公众号,微信公众号文章订阅,微信公众号文章,公众号RSS订阅,公众号RSS,微信rss订阅源地址,微信rss订阅源,微信rss聚合,微信rss生成,微信公众号文章提取,公众号文章导出,微信公众号文章导出,公众号rss订阅源地址,公众号rss源,公众号rss生成器,微信公众号更新提醒"
     name="keywords" data-n-head="true">
 
-  <link rel="stylesheet" href="./static/css/style.css" />
   <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12"></script>
   <script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js"></script>
-  <!-- MDUI CSS -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mdui@1.0.0/dist/css/mdui.min.css"
-    integrity="sha384-2PJ2u4NYg6jCNNpv3i1hK9AoAqODy6CdiC+gYiL2DVx+ku5wzJMFNdE3RoWfBIRP" crossorigin="anonymous" />
+
+  <!-- element-ui -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/element-ui@2.13.2/lib/theme-chalk/index.css">
+  <script src="https://cdn.jsdelivr.net/npm/element-ui@2.13.2/lib/index.js"></script>
 
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=UA-176067962-2"></script>
@@ -30,47 +30,34 @@
   </script>
 </head>
 
-<body class="mdui-container-fluid mdui-typo mdui-appbar-with-toolbar">
-  <div id="app" class="">
-    <header class="">
-      <div class="mdui-appbar mdui-appbar-fixed">
-        <div class="mdui-toolbar mdui-color-indigo">
-          <!-- <a
-             mdui-drawer="{target: '#main-drawer', swipe: true}"
-              href="javascript:;"
-              class="mdui-btn mdui-btn-icon"
-              ><i class="mdui-icon material-icons">menu</i></a
-            > -->
-          <a href="https://github.com/hellodword/wechat-feeds" target="_blank" class="mdui-typo-headline">公众号RSS</a>
-          <div class="mdui-toolbar-spacer"></div>
+<style>
+  html,
+  body {
+    height: 100%;
+  }
 
+  #app {
+    height: 100%;
+    overflow-y: scroll;
+  }
 
-          <a v-show="github" href="javascript:;" mdui-tooltip="{content: '切换国内'}" class="mdui-btn mdui-btn-icon"
-            @click="switchsource"><i class="mdui-icon material-icons">&#xe835;</i></a>
-          <a v-show="!github" href="javascript:;" mdui-tooltip="{content: '切换全球'}" class="mdui-btn mdui-btn-icon"
-            @click="switchsource"><i class="mdui-icon material-icons">&#xe834;</i></a>
-          <!-- <a href="javascript:;" mdui-tooltip="{content: '搜索'}" class="mdui-btn mdui-btn-icon" @click="search"><i
-              class="mdui-icon material-icons">search</i></a> -->
-          <a href="javascript:;" mdui-tooltip="{content: '返回顶部'}" class="mdui-btn mdui-btn-icon" @click="backTop"><i
-              class="mdui-icon material-icons">arrow_upward</i></a>
+  .el-header {
+    background-color: #B3C0D1;
+    color: #333;
+    line-height: 60px;
+  }
 
-          <a href="javascript:;" mdui-tooltip="{content: '刷新'}" class="mdui-btn mdui-btn-icon" @click="refresh"><i
-              class="mdui-icon material-icons">refresh</i></a>
-          <a href="javascript:;" mdui-tooltip="{content: '帮助'}" class="mdui-btn mdui-btn-icon" @click="showhelp"><i
-              class="mdui-icon material-icons">&#xe8fd;</i></a>
+  .tips {
+    color: grey;
+    font-size: 16px;
+    text-align: center;
+  }
+</style>
 
-          <!-- <a href="javascript:;" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">more_vert</i></a> -->
-        </div>
-      </div>
-    </header>
-    <!-- 默认抽屉栏在左侧 -->
-    <!-- <div class="mdui-drawer mdui-drawer-open" id="main-drawer">
-        
-      </div> -->
-
-    <div class="mdui-dialog" id="help">
-      <div class="mdui-dialog-title">帮助</div>
-      <div class="mdui-dialog-content">
+<body>
+  <el-container id="app" style="height: 100%;">
+    <el-dialog title="帮助" :visible.sync="showhelp" width="90%">
+      <div>
         RSS 由:
         <a href="https://github.com/hellodword/wechat-feeds" target="_blank">hellodword/wechat-feeds</a>
         提供
@@ -83,65 +70,58 @@
         当前总数: {{listdata.length}}
         <br>
         <br>
-        顶部的工具栏可以切换国内或者全球源地址
+        <el-switch style="display: block" v-model="github" active-color="#13ce66" inactive-color="#ff4949"
+          inactive-text="国内源(gitee)" active-text="全球源(github)" @change="switchsource()">
+        </el-switch>
         <br>
         <br>
         <a href="https://github.com/hellodword/wechat-feeds#%E5%A6%82%E4%BD%95%E6%B7%BB%E5%8A%A0%E4%BF%AE%E6%94%B9%E5%85%AC%E4%BC%97%E5%8F%B7"
           target="_blank"><b>没有你想要的公众号？点这里去新增</b></a>
       </div>
-      <div class="mdui-dialog-actions">
-        <button class="mdui-btn mdui-ripple" mdui-dialog-cancel>确定</button>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="showhelp = false">确 定</el-button>
+      </span>
+    </el-dialog>
+
+
+    <el-header style="display: flex;">
+      <el-input placeholder="搜索(名称/描述/bizid)" v-model="key" @input="search()" clearable></el-input>
+      <div style="vertical-align: middle;margin: 3px;">
+        <i class="el-icon-question" @click="showhelp = true" style="vertical-align: middle;font-size: 30px;"></i>
       </div>
-    </div>
-    <div v-if="isloading">
-      <div class="mdui-progress">
-        <div class="mdui-progress-indeterminate"></div>
-      </div>
-      loading...
-    </div>
-    <div v-else class="">
+    </el-header>
 
+    <el-main style="overflow-y:auto;">
+      <el-backtop target=".el-main"></el-backtop>
+      <ul class="infinite-list" v-loading="isloading" v-infinite-scroll="loadMore" infinite-scroll-disabled="disabled"
+        infinite-scroll-immediate="false">
+        <block v-for="item in showResults">
+          <el-row type="flex" :gutter="8">
+            <el-col style="width: 50px; right: 0px;">
+              <el-avatar icon="el-icon-user-solid" size="large" shape="circle" :src="item.head_img || ''">
+              </el-avatar>
+            </el-col>
+            <el-col>
+              <div><b>{{item.name}}</b></div>
+              <div
+                style="overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 3;-webkit-box-orient: vertical;">
+                {{item.description}}</div>
+            </el-col>
+            <el-col style="width: 30px; left: 0px;">
+              <i @click="()=>copy(makeRssUrl(item))" class="el-icon-copy-document" style="font-size: 20px;"></i>
+            </el-col>
+          </el-row>
 
-      <!-- 搜索 -->
-      <div class="mdui-p-y-3">
-        <div class="mdui-textfield mdui-textfield-expandable mdui-textfield-expanded search">
-          <button class="mdui-textfield-icon mdui-btn mdui-btn-icon"><i
-              class="mdui-icon material-icons">search</i></button>
-          <input class="mdui-textfield-input" type="text" placeholder="Search" v-model="key" @input="search()" />
-          <button class="mdui-btn mdui-btn-icon search-input-clear" @click="key=''"><i
-              class="mdui-icon material-icons">close</i></button>
-        </div>
-      </div>
-      <div class="mdui-divider"></div>
-
-      <div class="list mdui-list">
-        <block v-for="(item,i) in (key?searchResults:listdata)" :key="i">
-          <ul class="mdui-list mdui-list-dense">
-            <li class="mdui-list-item mdui-ripple">
-              <div class="mdui-list-item-avatar">
-                <img v-bind:src="item.head_img">
-              </div>
-              <div class="mdui-list-item-content">
-                <div class="mdui-list-item-title">{{item.name}}</div>
-                <div class="mdui-list-item-text mdui-list-item-two-line">{{item.description}}</div>
-              </div>
-              <a href="javascript:;" mdui-tooltip="{content: '复制链接'}" class="mdui-btn mdui-btn-icon"
-                @click="()=>copy(makeRssUrl(item))"><i class="mdui-icon material-icons">&#xe14d;</i></a>
-            </li>
-
-          </ul>
-          <div class="mdui-divider"></div>
+          <el-divider></el-divider>
         </block>
-      </div>
-    </div>
-  </div>
-  <!-- MDUI JavaScript -->
-  <script src="https://cdn.jsdelivr.net/npm/mdui@1.0.0/dist/js/mdui.min.js"
-    integrity="sha384-aB8rnkAu/GBsQ1q6dwTySnlrrbhqDwrDnpVHR2Wgm8pWLbwUnzDcIROX3VvCbaK+"
-    crossorigin="anonymous"></script>
-  <script>
-    var $$ = mdui.JQ;
-  </script>
+      </ul>
+      <p class="tips" v-if="!noMore">加载中...</p>
+      <p class="tips" v-if="noMore">没有更多了</p>
+    </el-main>
+
+  </el-container>
+
+
   <script>
     function getData() {
       // jsdelivr 缓存刷新没有那么及时
@@ -175,26 +155,37 @@
       el: "#app",
       data() {
         return {
+          showhelp: true,
+          loading: false,
+          indexLimit: 0,
+          showsearch: false,
           github: true,
           isloading: true,
-          listdata: [{}, {}, {}],
+          listdata: [],
 
           // 搜索
           key: "",
           searchResults: [],
+          showResults: [],
           search: debounce(() => {
+            this.showResults = [];
+            document.querySelector(".el-main").scrollTop = 0;
             this.searchResults = this.selectMatchItems(this.listdata, this.key);
+            this.loadMore();
           }),
         };
       },
+      computed: {
+        noMore() {
+          return this.showResults.length >= this.searchResults.length;
+        },
+        disabled() {
+          return this.loading || this.noMore;
+        }
+      },
       created() {
         clipboard_ = new ClipboardJS(".copy");
-        clipboard_.on("success", function () {
-          // alert("复制成功");
-          mdui.snackbar({
-            message: '复制成功',
-          });
-        });
+        clipboard_.on("success", this.copied);
         clipboard_.on("error", function (err) {
           throw err;
         });
@@ -212,38 +203,41 @@
               return 0;
             });
             this.listdata = res;
+            this.searchResults = this.listdata;
+            this.loadMore();
           });
         });
       },
       methods: {
-        selectMatchItems(list, key) {
-          return list.filter(item => {
-            return (item['name'] || '').indexOf(key) > -1 || (item['description'] || '').indexOf(key) > -1
+        loadMore() {
+          if (this.noMore) {
+            return;
+          }
+          this.loading = true;
+          this.showResults = this.showResults.concat(this.searchResults.slice(this.showResults.length, this.showResults.length + 20));
+          this.loading = false;
+        },
+        copied() {
+          this.$message({
+            showClose: true,
+            message: '复制成功',
+            type: 'success',
           });
         },
-        showhelp() {
-          var inst = new mdui.Dialog('#help');
-          inst.open();
+        selectMatchItems(list, key) {
+          return key == '' ? list : list.filter(item => {
+            return (item['name'] || '').indexOf(key) > -1 || (item['description'] || '').indexOf(key) > -1 || (item['bizid'] && item['bizid'] === key);
+          });
         },
         makeRssUrl({ bizid = "" }) {
           return this.github ? `https://github.com/hellodword/wechat-feeds/raw/feeds/${bizid}.xml` : `https://gitee.com/BlogZ/wechat-feeds/raw/feeds/${bizid}.xml`;
         },
-        refresh() {
-          location.reload();
-        },
-        search() {
-          mdui.snackbar({
-            message: '等待实现',
-          });
-        },
         switchsource() {
-          this.github = !this.github;
-          mdui.snackbar({
-            message: this.github ? '已切换到全球' : '已切换到国内',
+          this.$message({
+            showClose: true,
+            message: this.github ? '已切换到全球源' : '已切换到国内源',
+            type: 'success',
           });
-        },
-        backTop() {
-          window.scrollTo({ top: 1, behavior: "smooth" });
         },
         copy(text) {
           let button = document.createElement("button");
