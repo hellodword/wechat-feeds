@@ -27,6 +27,34 @@
 
 > 列表页 [https://wechat.privacyhide.com/](https://wechat.privacyhide.com/)  
 
+> 有什么需要频繁交流的问题和建议可以在 [![聊天室](https://badges.gitter.im/wechat-feeds/chat.svg)](https://gitter.im/wechat-feeds/chat?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge) 交流, 当然在这之前建议先阅读本文档.  
+
+<p align="center">
+   <a href="https://gitter.im/wechat-feeds/chat?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge" alt="chat">
+         <img alt="Gitter" src="https://badges.gitter.im/wechat-feeds/chat.svg"></a>
+   <br>
+   <a href="http://wechat.privacyhide.com/" alt="website">
+      <img alt="Website" src="https://img.shields.io/website?down_message=offline&up_message=online&url=http%3A%2F%2Fwechat.privacyhide.com%2F"></a>
+   <br>
+    <a href="https://github.com/hellodword/wechat-feeds/graphs/contributors" alt="Contributors">
+        <img src="https://img.shields.io/github/contributors/hellodword/wechat-feeds" /></a>
+    <a href="https://github.com/hellodword/wechat-feeds/pulse" alt="Activity">
+        <img src="https://img.shields.io/github/commit-activity/m/hellodword/wechat-feeds" /></a>
+    <br>
+    <img alt="GitHub forks" src="https://img.shields.io/github/forks/hellodword/wechat-feeds?style=social">
+    <img alt="GitHub stars" src="https://img.shields.io/github/stars/hellodword/wechat-feeds?style=social">
+    <img alt="GitHub followers" src="https://img.shields.io/github/followers/hellodword?style=social">
+    <br>
+    <img alt="GitHub issues" src="https://img.shields.io/github/issues-raw/hellodword/wechat-feeds">
+    <img alt="GitHub closed issues" src="https://img.shields.io/github/issues-closed-raw/hellodword/wechat-feeds">
+    <br>
+    <img alt="GitHub pr" src="https://img.shields.io/github/issues-pr-raw/hellodword/wechat-feeds">
+    <img alt="GitHub closed issues" src="https://img.shields.io/github/issues-pr-closed-raw/hellodword/wechat-feeds">
+    <br>
+    <img alt="GitHub repo size" src="https://img.shields.io/github/repo-size/hellodword/wechat-feeds">
+</p>
+
+
 众所周知, 微信公众号比较封闭, 爬取也有一定门槛, 对于 RSS 重度用户来说很不友好, 加上如今订阅号的推送也是乱序时间轴的, 作为在推荐算法的重重包围下做挣扎的一员, 希望在此借助 Github 为同好提供有限的订阅服务.
 
 ---
@@ -58,8 +86,8 @@
 
 4. **注意事项**:
    1. 可以一次性添加多个, 也可以多次提交pr.
-   2. 请确认自己的输入法, 分隔的标点符号为半角符号, 而不是全角符号, 区别请自行搜索
-   3. 直接在网页上拉到行尾添加, 以免破坏文件格式
+   2. 请确认自己的输入法, 分隔的标点符号为半角符号, 而不是全角符号, 区别请自行搜索.
+   3. 直接在网页上拉到行尾添加, 以免破坏文件格式.
    4. 获取 `bizid`, 参见 [如何获取 bizid](#如何获取-bizid)
    5. `name` 和 `bizid` 为必需, `description` 可留空, `description` 内如有半角双引号、换行、逗号时, 需要转义, 参见 [csv 转义方式](#csv-转义方式)
 
