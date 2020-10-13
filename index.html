@@ -58,25 +58,28 @@
   <el-container id="app" style="height: 100%;">
     <el-dialog title="帮助" :visible.sync="showhelp" width="90%">
       <div>
-        RSS 由:
-        <a href="https://github.com/hellodword/wechat-feeds" target="_blank">hellodword/wechat-feeds</a>
-        提供
-        <br>
-        页面由:
-        <a href="https://github.com/Treblex/wechat-feeds-page" target="_blank">Treblex/wechat-feeds-page</a>
-        编写
+        <a href="https://github.com/hellodword/wechat-feeds#%E5%A6%82%E4%BD%95%E6%B7%BB%E5%8A%A0%E4%BF%AE%E6%94%B9%E5%85%AC%E4%BC%97%E5%8F%B7"
+          target="_blank"><b>没有你想要的公众号？点这里去新增</b></a>
         <br>
         <br>
-        当前总数: {{listdata.length}}
+        <a href="https://github.com/hellodword/wechat-feeds/blob/pages/README.md"
+          target="_blank"><b>前端代码（页面实在太难写了求助😂）</b></a>
         <br>
         <br>
         <el-switch style="display: block" v-model="github" active-color="#13ce66" inactive-color="#ff4949"
-          inactive-text="国内源(gitee)" active-text="全球源(github)" @change="switchsource()">
+          inactive-text="国内 gitee 源" active-text="全球 github 源" @change="switchsource()">
         </el-switch>
         <br>
+        当前总数：{{listdata.length}}
         <br>
-        <a href="https://github.com/hellodword/wechat-feeds#%E5%A6%82%E4%BD%95%E6%B7%BB%E5%8A%A0%E4%BF%AE%E6%94%B9%E5%85%AC%E4%BC%97%E5%8F%B7"
-          target="_blank"><b>没有你想要的公众号？点这里去新增</b></a>
+        数据版本：{{version}}（可能存在缓存问题）
+        <br>
+        <br>
+        项目主页：<a href="https://github.com/hellodword/wechat-feeds" target="_blank">hellodword/wechat-feeds</a>
+        <br>
+        <br>
+        感谢（排名不分先后）：
+        <a href="https://github.com/Treblex" target="_blank">Treblex</a>
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="showhelp = false">确 定</el-button>
@@ -123,18 +126,20 @@
 
 
   <script>
-    function getData() {
-      // jsdelivr 缓存刷新没有那么及时
-      return fetch("VERSION").then((res) => res.text()).then((version) => {
-        return fetch(
-          `https://cdn.jsdelivr.net/gh/hellodword/wechat-feeds@${version}/details.json`,
-          { method: "GET" }
-        )
-          .then((res) => res.json())
-          .then((res) => {
-            return res;
-          });
-      });
+    // jsdelivr 缓存刷新没有那么及时
+    function getVersion() {
+      return fetch("VERSION").then((res) => res.text());
+    }
+
+    function getData(version) {
+      return fetch(
+        `https://cdn.jsdelivr.net/gh/hellodword/wechat-feeds@${version}/details.json`,
+        { method: "GET" }
+      )
+        .then((res) => res.json())
+        .then((res) => {
+          return res;
+        });
     }
 
     // 防抖
@@ -155,6 +160,7 @@
       el: "#app",
       data() {
         return {
+          version: "latest",
           showhelp: true,
           loading: false,
           indexLimit: 0,
@@ -191,20 +197,23 @@
         });
 
         setTimeout(() => {
-          getData().then((res) => {
-            this.isloading = false;
-            res.sort(function (a, b) {
-              if (a.name < b.name) {
-                return -1;
-              }
-              if (a.name > b.name) {
-                return 1;
-              }
-              return 0;
+          getVersion().then((version) => {
+            this.version = version;
+            getData(this.version).then((res) => {
+              this.isloading = false;
+              res.sort(function (a, b) {
+                if (a.name < b.name) {
+                  return -1;
+                }
+                if (a.name > b.name) {
+                  return 1;
+                }
+                return 0;
+              });
+              this.listdata = res;
+              this.searchResults = this.listdata;
+              this.loadMore();
             });
-            this.listdata = res;
-            this.searchResults = this.listdata;
-            this.loadMore();
           });
         });
       },
