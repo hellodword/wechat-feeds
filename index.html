@@ -71,7 +71,7 @@
         <br>
         当前总数：{{listdata.length}}
         <br>
-        数据版本：{{version}}（可能存在缓存问题）
+        数据版本：{{version}}（可能存在缓存问题，可以试试刷新一下）
         <br>
         <br>
         项目主页：<a href="https://github.com/hellodword/wechat-feeds" target="_blank">hellodword/wechat-feeds</a>
@@ -159,7 +159,7 @@
       el: "#app",
       data() {
         return {
-          version: "latest",
+          version: "",
           showhelp: true,
           loading: false,
           indexLimit: 0,
@@ -196,7 +196,17 @@
         });
 
         setTimeout(() => {
-          getVersion().then((version) => {
+          this.initSource();
+        });
+      },
+      methods: {
+        async initSource() {
+          for (let i = 0; i < 10; i++) {
+            let version = await getVersion();
+            version = version.trim();
+            if (version.length !== 7) {
+              continue;
+            }
             this.version = version;
             getData(this.version).then((res) => {
               this.isloading = false;
@@ -213,10 +223,14 @@
               this.searchResults = this.listdata;
               this.loadMore();
             });
+            return;
+          }
+          this.$message({
+            showClose: false,
+            message: '请求最新版本失败',
+            type: 'error',
           });
-        });
-      },
-      methods: {
+        },
         loadMore() {
           if (this.noMore) {
             return;
