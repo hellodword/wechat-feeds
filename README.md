@@ -30,28 +30,48 @@
 > 有什么需要频繁交流的问题和建议可以在 [![聊天室](https://badges.gitter.im/wechat-feeds/chat.svg)](https://gitter.im/wechat-feeds/chat?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge) 交流, 当然在这之前建议先阅读本文档.  
 
 <p align="center">
-   <a href="https://gitter.im/wechat-feeds/chat?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge" alt="chat">
-         <img alt="Gitter" src="https://badges.gitter.im/wechat-feeds/chat.svg"></a>
+   <a href="https://gitter.im/wechat-feeds/chat?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge" alt="Gitter">
+      <img alt="Gitter" src="https://badges.gitter.im/wechat-feeds/chat.svg" />
+   </a>
    <br>
-   <a href="http://wechat.privacyhide.com/" alt="website">
-      <img alt="Website" src="https://img.shields.io/website?down_message=offline&up_message=online&url=http%3A%2F%2Fwechat.privacyhide.com%2F"></a>
+   <a href="http://wechat.privacyhide.com/" alt="Website">
+      <img alt="Website" src="https://img.shields.io/website?down_message=offline&up_message=online&url=http%3A%2F%2Fwechat.privacyhide.com%2F" />
+   </a>
    <br>
-    <a href="https://github.com/hellodword/wechat-feeds/graphs/contributors" alt="Contributors">
-        <img src="https://img.shields.io/github/contributors/hellodword/wechat-feeds" /></a>
-    <a href="https://github.com/hellodword/wechat-feeds/pulse" alt="Activity">
-        <img src="https://img.shields.io/github/commit-activity/m/hellodword/wechat-feeds" /></a>
-    <br>
-    <img alt="GitHub forks" src="https://img.shields.io/github/forks/hellodword/wechat-feeds?style=social">
-    <img alt="GitHub stars" src="https://img.shields.io/github/stars/hellodword/wechat-feeds?style=social">
-    <img alt="GitHub followers" src="https://img.shields.io/github/followers/hellodword?style=social">
-    <br>
-    <img alt="GitHub issues" src="https://img.shields.io/github/issues-raw/hellodword/wechat-feeds">
-    <img alt="GitHub closed issues" src="https://img.shields.io/github/issues-closed-raw/hellodword/wechat-feeds">
-    <br>
-    <img alt="GitHub pr" src="https://img.shields.io/github/issues-pr-raw/hellodword/wechat-feeds">
-    <img alt="GitHub closed issues" src="https://img.shields.io/github/issues-pr-closed-raw/hellodword/wechat-feeds">
-    <br>
-    <img alt="GitHub repo size" src="https://img.shields.io/github/repo-size/hellodword/wechat-feeds">
+   <a href="https://github.com/hellodword/wechat-feeds/graphs/contributors" alt="Contributors">
+      <img alt="Contributors" src="https://img.shields.io/github/contributors/hellodword/wechat-feeds" />
+   </a>
+   <a href="https://github.com/hellodword/wechat-feeds/pulse" alt="Activity">
+      <img alt="Activity" src="https://img.shields.io/github/commit-activity/m/hellodword/wechat-feeds" />
+   </a>
+   <br>
+   <a href="https://github.com/hellodword/wechat-feeds/network/members" alt="GitHub forks">
+      <img alt="GitHub forks" src="https://img.shields.io/github/forks/hellodword/wechat-feeds?style=social" />
+   </a>
+   <a href="https://github.com/hellodword/wechat-feeds/stargazers" alt="GitHub stars">
+      <img alt="GitHub stars" src="https://img.shields.io/github/stars/hellodword/wechat-feeds?style=social" />
+   </a>
+   <a href="https://github.com/hellodword?tab=followers" alt="GitHub followers">
+      <img alt="GitHub followers" src="https://img.shields.io/github/followers/hellodword?style=social" />
+   </a>
+   <br>
+   <a href="https://github.com/hellodword/wechat-feeds/issues" alt="GitHub issues">
+      <img alt="GitHub issues" src="https://img.shields.io/github/issues-raw/hellodword/wechat-feeds" />
+   </a>
+   <a href="https://github.com/hellodword/wechat-feeds/issues?q=is%3Aissue+is%3Aclosed" alt="GitHub closed issues">
+      <img alt="GitHub closed issues" src="https://img.shields.io/github/issues-closed-raw/hellodword/wechat-feeds" />
+   </a>
+   <br>
+   <a href="https://github.com/hellodword/wechat-feeds/pulls" alt="GitHub pr">
+      <img alt="GitHub pr" src="https://img.shields.io/github/issues-pr-raw/hellodword/wechat-feeds" />
+   </a>
+   <a href="https://github.com/hellodword/wechat-feeds/pulls?q=is%3Apr+is%3Aclosed" alt="GitHub closed pr">
+      <img alt="GitHub closed pr" src="https://img.shields.io/github/issues-pr-closed-raw/hellodword/wechat-feeds" />
+   </a>
+   <br>
+   <a href="https://github.com/settings/repositories" alt="GitHub repo size">
+      <img alt="GitHub repo size" src="https://img.shields.io/github/repo-size/hellodword/wechat-feeds" />
+   </a>
 </p>
 
 
