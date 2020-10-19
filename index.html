@@ -104,7 +104,9 @@
               </el-avatar>
             </el-col>
             <el-col>
-              <div><b>{{item.name}}</b></div>
+              <div><b>{{item.name}}</b>
+                <font size="2" color="grey">{{formatTime(item.last_update)}}</font>
+              </div>
               <div
                 style="overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 3;-webkit-box-orient: vertical;">
                 {{item.description}}</div>
@@ -200,6 +202,45 @@
         });
       },
       methods: {
+        // https://segmentfault.com/a/1190000014795596
+        formatTime(last_update) {
+          if (!last_update) {
+            return "";
+          }
+
+          const minute = 1000 * 60;
+          const hour = minute * 60;
+          const day = hour * 24;
+          const halfamonth = day * 15;
+          const month = day * 30;
+
+          let now = new Date().getTime();
+          let diffValue = now - last_update * 1000;
+          if (diffValue < 0) {
+            return "";
+          }
+
+          let monthC = diffValue / month;
+          let weekC = diffValue / (7 * day);
+          let dayC = diffValue / day;
+          let hourC = diffValue / hour;
+          let minC = diffValue / minute;
+
+          if (monthC >= 1) {
+            result = parseInt(monthC) + "个月前";
+          } else if (weekC >= 1) {
+            result = parseInt(weekC) + "周前";
+          } else if (dayC >= 1) {
+            result = parseInt(dayC) + "天前";
+          } else if (hourC >= 1) {
+            result = parseInt(hourC) + "个小时前";
+          } else if (minC >= 1) {
+            result = parseInt(minC) + "分钟前";
+          } else {
+            result = "刚刚";
+          }
+          return result;
+        },
         async initSource() {
           for (let i = 0; i < 10; i++) {
             let version = await getVersion();
