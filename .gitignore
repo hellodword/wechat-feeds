@@ -1,2 +1,3 @@
 *.atom
 *.log
+go.sum
