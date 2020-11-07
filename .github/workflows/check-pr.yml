@@ -37,4 +37,4 @@ jobs:
         uses: allthatjazzleo/actions-pull-request-add-comment@master
         with:
           message: "${{ steps.checkpr.outputs.body }}"
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN_COMMENT_PR }}
