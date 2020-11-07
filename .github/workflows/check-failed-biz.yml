@@ -60,7 +60,25 @@ jobs:
           fi
 
       - name: Run
-        run: cd check-failed-biz && go run main.go
+        id: check
+        run: |
+          cd check-failed-biz
+          body=$(go run main.go)
+          echo ::set-output name=body::$(echo "${body}")
+
+      - uses: actions/github-script@0.4.0
+        if: |
+          steps.check.outputs.body != ''
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            github.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: "${{ steps.check.outputs.body }}"
+            })
+
       - uses: actions/github-script@0.4.0
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
