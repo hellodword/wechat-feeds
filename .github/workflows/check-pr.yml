@@ -26,15 +26,7 @@ jobs:
               dep ensure
           fi
 
-      - name: Run
-        id: checkpr
+      - name: Check
         run: |
           cd check-pr
-          body="$(go run main.go)"
-          echo ::set-output name=body::${body}
-
-      - name: Comment PR
-        uses: allthatjazzleo/actions-pull-request-add-comment@master
-        with:
-          message: "${{ steps.checkpr.outputs.body }}"
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          go run main.go

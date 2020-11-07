@@ -10,8 +10,16 @@ import (
 )
 
 func main() {
-	bis := getList()
-	bds := getDetails()
+	bis, e := getList()
+	if e != nil {
+		fmt.Println("get list error", e)
+		os.Exit(0)
+	}
+	bds, e := getDetails()
+	if e != nil {
+		fmt.Println("get details error", e)
+		os.Exit(0)
+	}
 
 	bs := ""
 
@@ -28,9 +36,11 @@ LABEL:
 	}
 
 	if bs != "" {
-		fmt.Fprintf(os.Stderr, "%s", bs)
-		os.Exit(1) // crash to email me
+		fmt.Println(bs)
+	} else {
+		fmt.Println("一切正常")
 	}
+	os.Exit(0)
 }
 
 type bizInfo struct {
@@ -39,11 +49,11 @@ type bizInfo struct {
 	Description string `csv:"description"`
 }
 
-func getList() []*bizInfo {
+func getList() ([]*bizInfo, error) {
 
 	r, e := http.Get("https://github.com/hellodword/wechat-feeds/raw/main/list.csv")
 	if e != nil {
-		panic(e)
+		return nil, e
 	}
 
 	defer r.Body.Close()
@@ -51,10 +61,10 @@ func getList() []*bizInfo {
 	bis := []*bizInfo{}
 	e = gocsv.Unmarshal(r.Body, &bis)
 	if e != nil {
-		panic(e)
+		return nil, e
 	}
 
-	return bis
+	return bis, nil
 }
 
 type bizDetail struct {
@@ -62,10 +72,10 @@ type bizDetail struct {
 	BizID string `csv:"bizid" json:"bizid"`
 }
 
-func getDetails() []*bizDetail {
+func getDetails() ([]*bizDetail, error) {
 	r, e := http.Get("https://github.com/hellodword/wechat-feeds/raw/feeds/details.json")
 	if e != nil {
-		panic(e)
+		return nil, e
 	}
 
 	defer r.Body.Close()
@@ -73,8 +83,8 @@ func getDetails() []*bizDetail {
 	bds := []*bizDetail{}
 	e = json.NewDecoder(r.Body).Decode(&bds)
 	if e != nil {
-		panic(e)
+		return nil, e
 	}
 
-	return bds
+	return bds, nil
 }
