@@ -36,5 +36,13 @@ jobs:
       - name: Comment PR
         uses: thollander/actions-comment-pull-request@master
         with:
-          message: "${{ steps.checkpr.outputs.body }}"
+          message: |
+            "test"
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Comment PR
+        uses: thollander/actions-comment-pull-request@master
+        with:
+          message: |
+            "${{ steps.checkpr.outputs.body }}"
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
