@@ -1,0 +1,40 @@
+name: check pr
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Go 1.x
+        uses: actions/setup-go@v2
+        with:
+          go-version: ^1.14
+
+      - name: Check out code into the Go module directory
+        uses: actions/checkout@v2
+
+      - name: Get dependencies
+        run: |
+          cd check-pr
+          go get -v -t -d ./...
+          if [ -f Gopkg.toml ]; then
+              curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
+              dep ensure
+          fi
+
+      - name: Run
+        id: checkpr
+        run: |
+          cd check-pr
+          body="$(go run main.go)"
+          echo ::set-output name=body::${body}
+
+      - name: Comment PR
+        uses: allthatjazzleo/actions-pull-request-add-comment@master
+        with:
+          message: "${{ steps.checkpr.outputs.body }}"
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
