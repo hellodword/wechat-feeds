@@ -15,13 +15,13 @@ func main() {
 	bispr, e := getListPR()
 	if e != nil {
 		fmt.Println("csv 解析失败，请对照文档检查格式和转义有无问题。")
-		os.Exit(0)
+		os.Exit(1)
 	}
 
 	bis, e := getList()
 	if e != nil {
 		fmt.Println("自动检测失败，等待手动处理")
-		os.Exit(0)
+		os.Exit(1)
 	}
 
 	// 先检查是否有删除
@@ -38,7 +38,7 @@ LABEL1:
 
 	if len(deleted) != 0 {
 		fmt.Printf("删除了以下 bizid，如果是误删建议关闭本 pull request 重新提一个，如果确定要删除，等待手动处理\n\n%s\n", strings.Join(deleted, "\n"))
-		os.Exit(0)
+		os.Exit(1)
 	}
 
 	// 检查有无重复
@@ -55,10 +55,11 @@ LABEL1:
 
 	if len(duplicated) != 0 {
 		fmt.Printf("以下 bizid 重复，建议修改或者关闭本 pull request 重新提一个\n\n%s\n", strings.Join(duplicated, "\n"))
-		os.Exit(0)
+		os.Exit(1)
 	}
 
 	fmt.Println("自动检测通过，等待手动处理")
+	os.Exit(0)
 }
 
 type bizInfo struct {
