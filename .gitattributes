@@ -1,0 +1,2 @@
+*.go linguist-language=markdown
+*.mod linguist-language=markdown
