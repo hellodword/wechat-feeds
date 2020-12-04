@@ -96,36 +96,31 @@
 
 1. 首先要有一个 github 账户: [注册](https://github.com/join?source=login) | [登录](https://github.com/login)
 
-2. 如果你不熟悉 GitHub 同步上游的操作, 就先在浏览器中打开 `https://github.com/<你的github用户名>/wechat-feeds/settings#danger-zone`, **如果能成功访问没有 404**, 说明你之前 fork 过, 则点击 `Delete this repository` 并按照提示操作来删除你 fork 后的仓库. **同时这也是接下来每一步操作遇到问题时的通用解决办法**.
-
-![delete](img/how-to-pr/delete.png)
-
-3. 在浏览器中打开 [list.csv](https://github.com/hellodword/wechat-feeds/blob/main/list.csv), 先搜索有没有你需要的公众号, 确定没有则点击箭头指示的编辑按钮, 开始编辑
+2. 在浏览器中打开 [list.csv](https://github.com/hellodword/wechat-feeds/blob/main/list.csv), 先搜索有没有你需要的公众号, 确定没有则点击箭头指示的编辑按钮, 开始编辑
 
 ![edit-01](img/how-to-pr/edit-01.png)
 
-4. **注意事项**:
-   1. 可以一次性添加多个, 也可以多次提交pr.
-   2. 请确认自己的输入法, 分隔的标点符号为半角符号, 而不是全角符号, 区别请自行搜索.
-   3. 直接在网页上拉到行尾添加, 以免破坏文件格式.
-   4. 获取 `bizid`, 参见 [如何获取 bizid](#如何获取-bizid)
-   5. `name` 和 `bizid` 为必需, `description` 可留空, `description` 内如有半角双引号、换行、逗号时, 需要转义, 参见 [csv 转义方式](#csv-转义方式)
-
-
-根据下图的箭头指示添加完成后, 点击 **`Propose changes`**
+3. 拉到底部, 按照格式在文档的末尾添加你想要添加的公众号, 根据下图的箭头指示添加完成后, 点击 **`Propose changes`**, 注意第二个箭头处按照 **新增: xxx** 的格式写一下, 不要是默认的 `Update list.csv`
 
 ![edit-02](img/how-to-pr/edit-02.png)
 
-5. 网页跳转后来到如下页面则说明修改成功了, 开始提交 pr
+4. 网页跳转后来到如下页面则说明修改成功了, 开始提交 pr
 
 ![pr-01](img/how-to-pr/pr-01.png)
 ![pr-02](img/how-to-pr/pr-02.png)
 
 
-6. 接下来你就可以通过 github 或者 Email 查看这个 pr 是否被合并, 或者是否被要求更改
+5. 接下来你就可以通过 github 或者 Email 查看这个 pr 是否被合并, 或者是否被要求更改
 
 ![email](img/how-to-pr/email.png)
 
+6. **注意事项**:
+   1. **请确保每次 pr 只修改提交一次**.
+   2. **在自己的 pr 没被处理前, 建议不要立刻提新的 pr, 推荐多个公众号放在一次 pr 里, 或者关闭前一个 pr 重新提交**.
+   3. 请确认自己的输入法, 分隔的标点符号为半角符号, 而不是全角符号, 区别请自行搜索.
+   4. 直接在网页上拉到行尾添加, 以免破坏文件格式.
+   5. 获取 `bizid`, 参见 [如何获取 bizid](#如何获取-bizid)
+   6. `name` 和 `bizid` 为必需, `description` 可留空, `description` 内如有半角双引号、换行、逗号时, 需要转义, 参见 [csv 转义方式](#csv-转义方式)
 
 ---
 
@@ -139,7 +134,7 @@
 
 ![](img/bizid-01.png)
 
-2. 在 [这里](https://github.com/hellodword/wechat-feeds/issues/new) 新开一个 issue, 填上链接, github actions 会自动抓取和回复数据, 只需要等待几十秒然后复制就可以了. 参考 [#29](https://github.com/hellodword/wechat-feeds/issues/29). 如果失败, 请 [手动获取](#手动获取)
+2. 在 [这里](https://github.com/hellodword/wechat-feeds/issues/new) 新开一个 issue, 标题随便填写, 内容填上链接, github actions 会自动抓取和回复数据, 只需要等待一会然后复制就可以了. 参考 [#29](https://github.com/hellodword/wechat-feeds/issues/29). 只监听新开 issue 的事件, edit 无效. 如果失败, 请 [手动获取](#手动获取)
 
 #### 手动获取
 

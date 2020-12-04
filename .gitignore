@@ -1,3 +1,4 @@
 *.atom
 *.log
 go.sum
+.vscode
