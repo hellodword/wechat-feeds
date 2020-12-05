@@ -1,0 +1,56 @@
+name: close empty issue
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  empty:
+    name: empty check
+    runs-on: ubuntu-latest
+    if: |
+      github.event.issue.body == ''
+    steps:
+      - run: echo "empty body"
+  issue-auto-label:
+    name: issues auto label
+    needs: empty
+    runs-on: ubuntu-latest
+    if: |
+      github.event_name == 'issues' && github.event.action == 'opened'
+    steps:
+      - uses: actions/github-script@0.4.0
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            github.issues.addLabels({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              labels: ['invalid']
+            })
+  issue:
+    name: issue comment
+    needs: empty
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@0.4.0
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            github.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: "issue 内容不可为空，请阅读 [如何获取 bizid?](https://github.com/hellodword/wechat-feeds#%E5%A6%82%E4%BD%95%E8%8E%B7%E5%8F%96-bizid)"
+            })
+
+      - uses: actions/github-script@0.4.0
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            github.issues.update({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: "closed"
+            })
