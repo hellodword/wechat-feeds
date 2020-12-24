@@ -1,0 +1,8 @@
+pull_request_rules:
+  - name: automatic merge for master when CI passes
+    conditions:
+      - check-success=check pull request
+      - base=main
+    actions:
+      merge:
+        method: merge
