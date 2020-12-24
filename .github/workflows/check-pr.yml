@@ -62,3 +62,11 @@ jobs:
         run: |
           cd check-pr
           go run main.go
+
+      - name: Merge
+        run: |
+          git config user.name ${{ secrets.GIT_USER_NAME }}
+          git config user.email ${{ secrets.GIT_USER_EMAIL }}
+          git branch
+          git remote -v
+          git log -4
