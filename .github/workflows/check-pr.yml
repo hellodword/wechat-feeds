@@ -62,3 +62,16 @@ jobs:
         run: |
           cd check-pr
           go run main.go
+
+      - name: Merge
+        run: |
+          git config -l
+          git branch -v
+          git remote -v
+          git log -4
+          git checkout -b main
+          git pull origin main
+          git log -4
+          git config user.name hellodword
+          git config user.email 46193371+hellodword@users.noreply.github.com
+          git push -u origin main
