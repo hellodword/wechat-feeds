@@ -64,21 +64,17 @@ jobs:
         run: |
           cd check-pr
           go run main.go
-
-      - name: Merge
-        run: |
-          git config user.name hellodword
-          git config user.email "46193371+hellodword@users.noreply.github.com"
-
-          git log -4
-          git config -l
-          git remote -v
-
-          CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
-          echo "CURRENT_BRANCH ${CURRENT_BRANCH}"
-
-          git checkout -b main
-          git push -u origin main
+      # - name: Merge
+      #   run: |
+      #     git config user.name hellodword
+      #     git config user.email "46193371+hellodword@users.noreply.github.com"
+      #     git log -4
+      #     git config -l
+      #     git remote -v
+      #     CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
+      #     echo "CURRENT_BRANCH ${CURRENT_BRANCH}"
+      #     git checkout -b main
+      #     git push -u origin main
       # - name: automerge
       #   uses: "pascalgn/automerge-action@v0.13.0"
       #   with:
