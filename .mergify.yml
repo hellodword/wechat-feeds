@@ -1,0 +1,23 @@
+pull_request_rules:
+  - name: say hi on new contribution
+    conditions:
+      - author!=@hellodword
+    actions:
+      comment:
+        message: |
+          欢迎你的 pr！
+          正在运行自动检查...
+          如果运行失败，请查看失败原因并根据原因进行修改。
+          如果不了解 force push，那么建议点击下方 close 关闭 pr 并重新提一个。
+
+  - name: automatic merge for master when CI passes
+    conditions:
+      - check-success=check pull request
+      - base=main
+    actions:
+      merge:
+        method: rebase
+      comment:
+        message: |
+          恭喜！
+          你的 pr 已经被 merge，请等待下一次成功更新，即可开始订阅。
