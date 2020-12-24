@@ -24,6 +24,22 @@ func main() {
 		os.Exit(1)
 	}
 
+	// 简单对比数量
+	if len(bis) >= 10000 {
+		fmt.Printf("已超过本服务限额 10000 个公众号，暂不接受添加新的公众号\n")
+		os.Exit(1)
+	}
+
+	if len(bispr)-len(bis) <= 0 {
+		fmt.Printf("原条目 %d，新条目 %d\n", len(bis), len(bispr))
+		os.Exit(1)
+	}
+
+	if len(bispr)-len(bis) >= 64 {
+		fmt.Printf("条目变化 %d 多于 64，每个 pr 请不要提交多于 64 个\n", len(bispr)-len(bis))
+		os.Exit(1)
+	}
+
 	// 先检查是否有删除
 	deleted := []string{}
 LABEL1:
