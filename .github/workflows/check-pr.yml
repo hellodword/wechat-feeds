@@ -62,3 +62,19 @@ jobs:
         run: |
           cd check-pr
           go run main.go
+
+      # - name: Merge
+      #   run: |
+      #     git config user.name hellodword
+      #     git config user.email ""
+      #     git checkout -b main
+      #     git pull --allow-unrelated-histories origin main
+      #     git log -4
+      #     git push -u origin main
+
+      - name: automerge
+        uses: "pascalgn/automerge-action@v0.13.0"
+        with:
+          args: "--trace"
+        env:
+          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
