@@ -45,6 +45,12 @@ LABEL1:
 	duplicated := []string{}
 	m := map[string]int8{}
 	for i := range bispr {
+
+		if bispr[i].BizID == "" {
+			fmt.Println("解析出空的 bizid")
+			os.Exit(1)
+		}
+
 		_, ok := m[bispr[i].BizID]
 		if ok {
 			duplicated = append(duplicated, bispr[i].BizID)
