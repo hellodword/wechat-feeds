@@ -16,16 +16,16 @@ jobs:
       #     GITHUB_CONTEXT: ${{ toJson(github) }}
       #   run: echo "$GITHUB_CONTEXT"
 
-      - id: files
-        uses: jitterbit/get-changed-files@v1
+      # - id: files
+      #   uses: jitterbit/get-changed-files@v1
 
-      - run: |
-          for changed_file in ${{ steps.files.outputs.all }}; do
-            if [ "${changed_file}" != "list.csv" ];then
-              echo "changed file: ${changed_file}."
-              exit 1
-            fi
-          done
+      # - run: |
+      #     for changed_file in ${{ steps.files.outputs.all }}; do
+      #       if [ "${changed_file}" != "list.csv" ];then
+      #         echo "changed file: ${changed_file}."
+      #         exit 1
+      #       fi
+      #     done
 
       - name: check commits number
         if: |
