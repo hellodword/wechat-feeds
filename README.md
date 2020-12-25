@@ -24,7 +24,7 @@
 
 ---
 
-> 给微信公众号生成 RSS 订阅源  
+> 给微信公众号生成 RSS 订阅源   
 
 > 列表页 [https://wechat.privacyhide.com/](https://wechat.privacyhide.com/)  
 
