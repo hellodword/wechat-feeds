@@ -5,9 +5,14 @@ pull_request_rules:
     actions:
       comment:
         message: |
+          @{{author}}，
+
           欢迎你的 pr！
+
           正在运行自动检查...
-          如果运行失败，请查看失败原因并根据原因进行修改。
+
+          如果运行失败，进入 [Checks](https://github.com/hellodword/wechat-feeds/pull/{{number}}/checks)，点击左侧的 `check pr``，查看具体的失败原因，并根据原因进行修改。
+
           如果不了解 force push，那么建议点击下方 close 关闭 pr 并重新提一个。
 
   - name: automatic merge for master when CI passes
@@ -19,5 +24,8 @@ pull_request_rules:
         method: rebase
       comment:
         message: |
+          @{{author}}，
+
           恭喜！
+
           你的 pr 已经被 merge，请等待下一次成功更新，即可开始订阅。
