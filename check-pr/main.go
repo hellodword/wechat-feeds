@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/base64"
 	"fmt"
+	"io"
 	"io/ioutil"
 	"net/http"
 	"os"
@@ -126,6 +127,12 @@ func getList() ([]*bizInfo, error) {
 
 	defer r.Body.Close()
 
+	bom := make([]byte, 3)
+	_, e = io.ReadFull(r.Body, bom)
+	if e != nil {
+		return nil, e
+	}
+
 	bis := []*bizInfo{}
 	e = gocsv.Unmarshal(r.Body, &bis)
 	if e != nil {
@@ -143,7 +150,7 @@ func getListPR() ([]*bizInfo, error) {
 	}
 
 	bis := []*bizInfo{}
-	e = gocsv.Unmarshal(bytes.NewReader(b), &bis)
+	e = gocsv.Unmarshal(bytes.NewReader(b[3:]), &bis)
 	if e != nil {
 		return nil, e
 	}

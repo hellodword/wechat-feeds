@@ -1,45 +1,24 @@
 name: check failed bizid
-on:
-  issues:
-    types: [opened]
+
+on: page_build
 
 jobs:
-  permission:
-    name: permission check
-    runs-on: ubuntu-latest
-    if: github.actor == github.event.repository.owner.login
-    steps:
-      - name: check permission
-        run: echo permission pass
-  format:
-    name: format check
-    needs: permission
-    runs-on: ubuntu-latest
-    if: |
-      startsWith(github.event.issue.title, 'check biz')
-    steps:
-      - name: check format
-        run: echo "checked body ${{ github.event.issue.title }}"
   issue-auto-label:
     name: issues auto label
-    needs: format
     runs-on: ubuntu-latest
-    if: |
-      github.event_name == 'issues' && github.event.action == 'opened'
     steps:
-      - uses: actions/github-script@0.4.0
+      - uses: actions/github-script@v3
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             github.issues.addLabels({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              issue_number: context.issue.number,
+              issue_number: 608, // context.issue.number,
               labels: ['check']
             })
   build:
     name: Build
-    needs: format
     runs-on: ubuntu-latest
     steps:
       - name: Set up Go 1.x
@@ -64,27 +43,32 @@ jobs:
         run: |
           cd check-failed-biz
           body=$(go run main.go)
-          echo ::set-output name=body::$(echo "${body}")
+          # https://github.community/t/set-output-truncates-multiline-strings/16852/3
+          body="${body//'%'/'%25'}"
+          body="${body//$'\n'/'%0A'}"
+          body="${body//$'\r'/'%0D'}"
+          echo "$body"
+          echo "::set-output name=body::$body"
 
-      - uses: actions/github-script@0.4.0
+      - uses: actions/github-script@v3
         if: |
           steps.check.outputs.body != ''
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             github.issues.createComment({
-              issue_number: context.issue.number,
+              issue_number: 608, // context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: "${{ steps.check.outputs.body }}"
+              body: `${{ steps.check.outputs.body }}`
             })
 
-      - uses: actions/github-script@0.4.0
+      - uses: actions/github-script@v3
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             github.issues.update({
-              issue_number: context.issue.number,
+              issue_number: 608, // context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
               state: "closed"
