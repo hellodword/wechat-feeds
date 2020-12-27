@@ -22,6 +22,7 @@ pull_request_rules:
     actions:
       merge:
         method: rebase
+        strict: true
       comment:
         message: |
           @{{author}}，
