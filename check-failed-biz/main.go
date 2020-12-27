@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"io"
 	"net/http"
 	"os"
 
@@ -36,6 +37,7 @@ LABEL:
 	}
 
 	if bs != "" {
+		bs = "以下 bizid 可能有问题或尚未同步：\n" + bs
 		fmt.Println(bs)
 	} else {
 		fmt.Println("一切正常")
@@ -57,6 +59,12 @@ func getList() ([]*bizInfo, error) {
 	}
 
 	defer r.Body.Close()
+
+	bom := make([]byte, 3)
+	_, e = io.ReadFull(r.Body, bom)
+	if e != nil {
+		return nil, e
+	}
 
 	bis := []*bizInfo{}
 	e = gocsv.Unmarshal(r.Body, &bis)
