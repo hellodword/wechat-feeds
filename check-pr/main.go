@@ -2,10 +2,12 @@ package main
 
 import (
 	"bytes"
+	"encoding/base64"
 	"fmt"
 	"io/ioutil"
 	"net/http"
 	"os"
+	"strconv"
 	"strings"
 
 	"github.com/gocarina/gocsv"
@@ -62,8 +64,8 @@ LABEL1:
 	m := map[string]int8{}
 	for i := range bispr {
 
-		if bispr[i].BizID == "" {
-			fmt.Println("解析出空的 bizid")
+		if !simpleCheck(bispr[i].BizID) {
+			fmt.Printf("解析出无效的 bizid   %s\n", bispr[i].BizID)
 			os.Exit(1)
 		}
 
@@ -82,6 +84,31 @@ LABEL1:
 
 	fmt.Println("自动检测通过，等待手动处理")
 	os.Exit(0)
+}
+
+func simpleCheck(bizid string) bool {
+	if bizid == "" {
+		return false
+	}
+	b, e := base64.StdEncoding.DecodeString(bizid)
+	if e != nil {
+		return false
+	}
+	if base64.StdEncoding.EncodeToString(b) != bizid {
+		return false
+	}
+	s := string(b)
+	if s == "" {
+		return false
+	}
+	i, e := strconv.Atoi(s)
+	if e != nil {
+		return false
+	}
+	if i <= 0 {
+		return false
+	}
+	return strconv.Itoa(i) == s
 }
 
 type bizInfo struct {
