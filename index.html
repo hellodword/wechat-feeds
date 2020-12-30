@@ -1,319 +1,378 @@
 <!DOCTYPE html>
 <html lang="zh">
+    <head>
+        <link
+            rel="shortcut icon"
+            href="data:image/x-icon;base64,AAABAAEAEBAAAAEAIABoBAAAFgAAACgAAAAQAAAAIAAAAAEAIAAAAAAAAAQAAMMOAADDDgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACQc7AUkHOwFAAAAAAAAAAAkHOwQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAkHOwwJBzsoiQc7PkkHOz+JBzs7iQc7L0kHOzgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAkHOxfJBzs/yQc7P8kHOz/JBzs/yQc7P8kHOz/JBzs/yQc7I8AAAAAAAAAAAAAAAAkHOx/JBzsMCQc7EAkHOwSJBzs/yQc7P8kHOz/JBzs/yQc7P8kHOz/JBzs/yQc7P8kHOz/JBzsPwAAAAAAAAAAJBzsbyQc7P8kHOzyJBzsZyQc7P8kHOz/JBzs/yQc7P8kHOz/JBzs/yQc7P8kHOz/JBzs/yQc7IwAAAAAJBzsQCQc7P8kHOz/JBzs/yQc7HUkHOz/JBzs/yQc7H4kHOzJJBzs/yQc7OwkHOxAJBzs/yQc7P8kHOxwJBzsECQc7P8kHOz/JBzs/yQc7P8kHOx0JBzs4iQc7P8hMO79JBzs/yQc7P8kHOz/JBzs/yQc7P8kHOzvJBzsGyQc7GgkHOz/JBzs/yQc7P8kHOz/JBzs7yQc7GUjJO3aIivt/yQc7P8kHOz/JBzs/yQc7P8kHOzZJBzsNwAAAAAkHOyBJBzs/yQc7P8kHOz/JBzs/yQc7P8kHOzvJBzsfyQc7HQkHOytJBzsvyQc7KckHOxjJBzsDwAAAAAAAAAAJBzsVCQc7P8kHOz/JBzs/yQc7NAkHOz6JBzs/yQc7P8kHOzfJBzsryQc7K8kHOy6JBzs8SQc7BUAAAAAAAAAACQc7BAkHOzPJBzs/yQc7P8kHOxhJBzs8CQc7P8kHOz/JBzsryQc7J4kHOz/JBzs/yQc7KgAAAAAAAAAAAAAAAAAAAAAJBzsMCQc7OEkHOz/Iibt/yMk7f8kHOz/JBzs/yQc7P8kHOz/JBzs/yQc7M8kHOkCAAAAAAAAAAAAAAAAAAAAAAAAAAAkHOwQJBzsjyEv7u8jJO3/JBzs/yQc7P8kHOz/JBzs/yQc7I8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAkHOwQJBzsQyQc7GEkHOxhJBzsQgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//8AAP/NAAD+AwAA/AEAAMAAAADAAAAAgAAAAAAAAAAAAQAAAAMAAAADAAAABwAAgAcAAMAfAADwfwAA//8AAA=="
+        />
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>给微信公众号生成RSS - wechat-feeds</title>
+        <meta
+            name="description"
+            content="给微信公众号生成RSS,wechat-feeds,微信公众号RSS订阅,微信公众号RSS,微信公众号订阅,微信公众号,微信公众号文章订阅,微信公众号文章,公众号RSS订阅,公众号RSS,微信rss订阅源地址,微信rss订阅源,微信rss聚合,微信rss生成,微信公众号文章提取,公众号文章导出,微信公众号文章导出,公众号rss订阅源地址,公众号rss源,公众号rss生成器,微信公众号更新提醒"
+        />
+        <meta
+            name="keywords"
+            content="wechat-feeds,微信公众号RSS订阅,微信公众号RSS,微信公众号订阅,微信公众号,微信公众号文章订阅,微信公众号文章,公众号RSS订阅,公众号RSS,微信rss订阅源地址,微信rss订阅源,微信rss聚合,微信rss生成,微信公众号文章提取,公众号文章导出,微信公众号文章导出,公众号rss订阅源地址,公众号rss源,公众号rss生成器,微信公众号更新提醒"
+        />
 
-<head>
-  <link rel="shortcut icon"
-    href="data:image/x-icon;base64,AAABAAEAEBAAAAEAIABoBAAAFgAAACgAAAAQAAAAIAAAAAEAIAAAAAAAAAQAAMMOAADDDgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACQc7AUkHOwFAAAAAAAAAAAkHOwQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAkHOwwJBzsoiQc7PkkHOz+JBzs7iQc7L0kHOzgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAkHOxfJBzs/yQc7P8kHOz/JBzs/yQc7P8kHOz/JBzs/yQc7I8AAAAAAAAAAAAAAAAkHOx/JBzsMCQc7EAkHOwSJBzs/yQc7P8kHOz/JBzs/yQc7P8kHOz/JBzs/yQc7P8kHOz/JBzsPwAAAAAAAAAAJBzsbyQc7P8kHOzyJBzsZyQc7P8kHOz/JBzs/yQc7P8kHOz/JBzs/yQc7P8kHOz/JBzs/yQc7IwAAAAAJBzsQCQc7P8kHOz/JBzs/yQc7HUkHOz/JBzs/yQc7H4kHOzJJBzs/yQc7OwkHOxAJBzs/yQc7P8kHOxwJBzsECQc7P8kHOz/JBzs/yQc7P8kHOx0JBzs4iQc7P8hMO79JBzs/yQc7P8kHOz/JBzs/yQc7P8kHOzvJBzsGyQc7GgkHOz/JBzs/yQc7P8kHOz/JBzs7yQc7GUjJO3aIivt/yQc7P8kHOz/JBzs/yQc7P8kHOzZJBzsNwAAAAAkHOyBJBzs/yQc7P8kHOz/JBzs/yQc7P8kHOzvJBzsfyQc7HQkHOytJBzsvyQc7KckHOxjJBzsDwAAAAAAAAAAJBzsVCQc7P8kHOz/JBzs/yQc7NAkHOz6JBzs/yQc7P8kHOzfJBzsryQc7K8kHOy6JBzs8SQc7BUAAAAAAAAAACQc7BAkHOzPJBzs/yQc7P8kHOxhJBzs8CQc7P8kHOz/JBzsryQc7J4kHOz/JBzs/yQc7KgAAAAAAAAAAAAAAAAAAAAAJBzsMCQc7OEkHOz/Iibt/yMk7f8kHOz/JBzs/yQc7P8kHOz/JBzs/yQc7M8kHOkCAAAAAAAAAAAAAAAAAAAAAAAAAAAkHOwQJBzsjyEv7u8jJO3/JBzs/yQc7P8kHOz/JBzs/yQc7I8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAkHOwQJBzsQyQc7GEkHOxhJBzsQgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//8AAP/NAAD+AwAA/AEAAMAAAADAAAAAgAAAAAAAAAAAAQAAAAMAAAADAAAABwAAgAcAAMAfAADwfwAA//8AAA==" />
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>给微信公众号生成RSS - wechat-feeds</title>
-  <meta name="description"
-    content="给微信公众号生成RSS,wechat-feeds,微信公众号RSS订阅,微信公众号RSS,微信公众号订阅,微信公众号,微信公众号文章订阅,微信公众号文章,公众号RSS订阅,公众号RSS,微信rss订阅源地址,微信rss订阅源,微信rss聚合,微信rss生成,微信公众号文章提取,公众号文章导出,微信公众号文章导出,公众号rss订阅源地址,公众号rss源,公众号rss生成器,微信公众号更新提醒" />
-  <meta name="keywords"
-    content="wechat-feeds,微信公众号RSS订阅,微信公众号RSS,微信公众号订阅,微信公众号,微信公众号文章订阅,微信公众号文章,公众号RSS订阅,公众号RSS,微信rss订阅源地址,微信rss订阅源,微信rss聚合,微信rss生成,微信公众号文章提取,公众号文章导出,微信公众号文章导出,公众号rss订阅源地址,公众号rss源,公众号rss生成器,微信公众号更新提醒">
+        <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12"></script>
+        <script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js"></script>
 
-  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12"></script>
-  <script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js"></script>
+        <!-- element-ui -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/element-ui@2.13.2/lib/theme-chalk/index.css" />
+        <script src="https://cdn.jsdelivr.net/npm/element-ui@2.13.2/lib/index.js"></script>
 
-  <!-- element-ui -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/element-ui@2.13.2/lib/theme-chalk/index.css">
-  <script src="https://cdn.jsdelivr.net/npm/element-ui@2.13.2/lib/index.js"></script>
-
-  <!-- Global site tag (gtag.js) - Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-176067962-2"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag() { dataLayer.push(arguments); }
-    gtag('js', new Date());
-
-    gtag('config', 'UA-176067962-2');
-  </script>
-</head>
-
-<style>
-  html,
-  body {
-    height: 100%;
-  }
-
-  #app {
-    height: 100%;
-    overflow-y: scroll;
-  }
-
-  .el-header {
-    background-color: #B3C0D1;
-    color: #333;
-    line-height: 60px;
-  }
-
-  .tips {
-    color: grey;
-    font-size: 16px;
-    text-align: center;
-  }
-</style>
-
-<body>
-  <el-container id="app" style="height: 100%;">
-    <el-dialog title="帮助" :visible.sync="showhelp" width="90%">
-      <div>
-        <a href="https://github.com/hellodword/wechat-feeds#%E5%A6%82%E4%BD%95%E6%B7%BB%E5%8A%A0%E4%BF%AE%E6%94%B9%E5%85%AC%E4%BC%97%E5%8F%B7"
-          target="_blank"><b>没有你想要的公众号？点这里去新增</b></a>
-        <br>
-        <br>
-        <a href="https://github.com/hellodword/wechat-feeds/blob/pages/README.md"
-          target="_blank"><b>前端代码（页面实在太难写了求助😂）</b></a>
-        <br>
-        <br>
-        <el-switch style="display: block" v-model="github" active-color="#13ce66" inactive-color="#ff4949"
-          inactive-text="国内 gitee 源" active-text="全球 github 源" @change="switchsource()">
-        </el-switch>
-        <br>
-        当前总数：{{listdata.length}}
-        <br>
-        数据版本：{{version}}（可能存在缓存问题，可以试试刷新一下）
-        <br>
-        <br>
-        项目主页：<a href="https://github.com/hellodword/wechat-feeds" target="_blank">hellodword/wechat-feeds</a>
-        <br>
-        <br>
-        感谢（排名不分先后）：
-        <a href="https://github.com/Treblex" target="_blank">Treblex</a>
-      </div>
-      <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="showhelp = false">确 定</el-button>
-      </span>
-    </el-dialog>
-
-
-    <el-header style="display: flex;">
-      <el-input placeholder="搜索(名称/描述/bizid)" v-model="key" @input="search()" clearable></el-input>
-      <div style="vertical-align: middle;margin: 3px;">
-        <i class="el-icon-question" @click="showhelp = true" style="vertical-align: middle;font-size: 30px;"></i>
-      </div>
-    </el-header>
-
-    <el-main style="overflow-y:auto;">
-      <el-backtop target=".el-main"></el-backtop>
-      <ul class="infinite-list" v-loading="isloading" v-infinite-scroll="loadMore" infinite-scroll-disabled="disabled"
-        infinite-scroll-immediate="false">
-        <block v-for="item in showResults">
-          <el-row type="flex" :gutter="8">
-            <el-col style="width: 50px; right: 0px;">
-              <el-avatar icon="el-icon-user-solid" size="large" shape="circle" :src="item.head_img || ''">
-              </el-avatar>
-            </el-col>
-            <el-col>
-              <div><b>{{item.name}}</b>
-                <font size="2" color="grey">{{formatTime(item.last_update)}}</font>
-              </div>
-              <div
-                style="overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 3;-webkit-box-orient: vertical;">
-                {{item.description}}</div>
-            </el-col>
-            <el-col style="width: 30px; left: 0px;">
-              <i @click="()=>copy(makeRssUrl(item))" class="el-icon-copy-document" style="font-size: 20px;"></i>
-            </el-col>
-          </el-row>
-
-          <el-divider></el-divider>
-        </block>
-      </ul>
-      <p class="tips" v-if="!noMore">加载中...</p>
-      <p class="tips" v-if="noMore">没有更多了</p>
-    </el-main>
-
-  </el-container>
-
-
-  <script>
-    // jsdelivr 缓存刷新没有那么及时
-    function getVersion() {
-      return fetch("VERSION").then((res) => res.text());
-    }
-
-    function getData(version) {
-      return fetch(
-        `https://cdn.jsdelivr.net/gh/hellodword/wechat-feeds@${version}/details.json`,
-        { method: "GET" }
-      )
-        .then((res) => res.json())
-        .then((res) => {
-          return res;
-        });
-    }
-
-    // 防抖
-    function debounce(fn, delay = 500) {
-      let timer = null;
-      return function (...args) {
-        let that = this;
-        clearTimeout(timer);
-        timer = setTimeout(() => {
-          fn.call(that, ...args);
-        }, delay);
-      };
-    }
-
-
-    let clipboard_;
-    const vm = new Vue({
-      el: "#app",
-      data() {
-        return {
-          version: "",
-          showhelp: true,
-          loading: false,
-          indexLimit: 0,
-          showsearch: false,
-          github: true,
-          isloading: true,
-          listdata: [],
-
-          // 搜索
-          key: "",
-          searchResults: [],
-          showResults: [],
-          search: debounce(() => {
-            this.showResults = [];
-            document.querySelector(".el-main").scrollTop = 0;
-            this.searchResults = this.selectMatchItems(this.listdata, this.key);
-            this.loadMore();
-          }),
-        };
-      },
-      computed: {
-        noMore() {
-          return this.showResults.length >= this.searchResults.length;
-        },
-        disabled() {
-          return this.loading || this.noMore;
-        }
-      },
-      created() {
-        clipboard_ = new ClipboardJS(".copy");
-        clipboard_.on("success", this.copied);
-        clipboard_.on("error", function (err) {
-          throw err;
-        });
-
-        setTimeout(() => {
-          this.initSource();
-        });
-      },
-      methods: {
-        // https://segmentfault.com/a/1190000014795596
-        formatTime(last_update) {
-          if (!last_update) {
-            return "";
-          }
-
-          const minute = 1000 * 60;
-          const hour = minute * 60;
-          const day = hour * 24;
-          const halfamonth = day * 15;
-          const month = day * 30;
-
-          let now = new Date().getTime();
-          let diffValue = now - last_update * 1000;
-          if (diffValue < 0) {
-            return "";
-          }
-
-          let monthC = diffValue / month;
-          let weekC = diffValue / (7 * day);
-          let dayC = diffValue / day;
-          let hourC = diffValue / hour;
-          let minC = diffValue / minute;
-
-          if (monthC >= 1) {
-            result = parseInt(monthC) + "个月前";
-          } else if (weekC >= 1) {
-            result = parseInt(weekC) + "周前";
-          } else if (dayC >= 1) {
-            result = parseInt(dayC) + "天前";
-          } else if (hourC >= 1) {
-            result = parseInt(hourC) + "个小时前";
-          } else if (minC >= 1) {
-            result = parseInt(minC) + "分钟前";
-          } else {
-            result = "刚刚";
-          }
-          return result;
-        },
-        async initSource() {
-          for (let i = 0; i < 10; i++) {
-            let version = await getVersion();
-            version = version.trim();
-            if (version.length !== 7) {
-              continue;
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-176067962-2"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag() {
+                dataLayer.push(arguments);
             }
-            this.version = version;
-            getData(this.version).then((res) => {
-              this.isloading = false;
-              res.sort(function (a, b) {
-                if (a.name < b.name) {
-                  return -1;
-                }
-                if (a.name > b.name) {
-                  return 1;
-                }
-                return 0;
-              });
-              this.listdata = res;
-              this.searchResults = this.listdata;
-              this.loadMore();
-            });
-            return;
-          }
-          this.$message({
-            showClose: false,
-            message: '请求最新版本失败',
-            type: 'error',
-          });
-        },
-        loadMore() {
-          if (this.noMore) {
-            return;
-          }
-          this.loading = true;
-          this.showResults = this.showResults.concat(this.searchResults.slice(this.showResults.length, this.showResults.length + 20));
-          this.loading = false;
-        },
-        copied() {
-          this.$message({
-            showClose: true,
-            message: '复制成功',
-            type: 'success',
-          });
-        },
-        selectMatchItems(list, key) {
-          return key == '' ? list : list.filter(item => {
-            return (item['name'] || '').indexOf(key) > -1 || (item['description'] || '').indexOf(key) > -1 || (item['bizid'] && item['bizid'] === key);
-          });
-        },
-        makeRssUrl({ bizid = "" }) {
-          return this.github ? `https://github.com/hellodword/wechat-feeds/raw/feeds/${bizid}.xml` : `https://gitee.com/BlogZ/wechat-feeds/raw/feeds/${bizid}.xml`;
-        },
-        switchsource() {
-          this.$message({
-            showClose: true,
-            message: this.github ? '已切换到全球源' : '已切换到国内源',
-            type: 'success',
-          });
-        },
-        copy(text) {
-          let button = document.createElement("button");
-          button.className = "copy";
-          button.setAttribute("data-clipboard-text", text);
-          document.body.appendChild(button);
-          button.click();
-          button.remove();
-        },
-      },
-    });
-  </script>
-</body>
+            gtag('js', new Date());
 
+            gtag('config', 'UA-176067962-2');
+        </script>
+    </head>
+
+    <style>
+        html,
+        body,
+        ul,
+        ol {
+            margin: 0px;
+            padding: 0px;
+        }
+
+        html,
+        body {
+            height: 100%;
+        }
+
+        #app {
+            max-width: 1080px;
+            min-width: 300px;
+            margin: 0px auto;
+            height: 100%;
+            overflow-y: auto;
+            overflow-x: hidden;
+            box-shadow: 0px 0px 10px 0px rgb(230, 230, 230);
+        }
+
+        .el-header {
+            background-color: #b3c0d1;
+            color: #333;
+            line-height: 60px;
+        }
+
+        .tips {
+            color: grey;
+            font-size: 16px;
+            text-align: center;
+        }
+
+        #app .description {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            font-size: 14px;
+            margin-top: 5px;
+            box-sizing: border-box;
+            padding-right: 80px;
+        }
+
+        .no-description {
+            color: rgb(198, 198, 198);
+        }
+
+        #app .el-icon-copy-document {
+            cursor: pointer;
+            font-size: 20px;
+        }
+
+    </style>
+
+    <body>
+        <el-container id="app" style="height: 100%">
+            <el-dialog title="帮助" :visible.sync="showhelp" width="85%">
+                <div>
+                    <a
+                        href="https://github.com/hellodword/wechat-feeds#%E5%A6%82%E4%BD%95%E6%B7%BB%E5%8A%A0%E4%BF%AE%E6%94%B9%E5%85%AC%E4%BC%97%E5%8F%B7"
+                        target="_blank"
+                        rel="noreferrer"
+                        ><b>没有你想要的公众号？点这里去新增</b></a
+                    >
+                    <br />
+                    <br />
+                    <a href="https://github.com/hellodword/wechat-feeds/blob/pages/README.md" rel="noreferrer" target="_blank">
+                        <b>前端代码（页面实在太难写了求助😂）</b>
+                    </a>
+                    <br />
+                    <br />
+                    <el-switch
+                        style="display: block"
+                        v-model="github"
+                        active-color="#13ce66"
+                        inactive-color="#ff4949"
+                        inactive-text="国内 gitee 源"
+                        active-text="全球 github 源"
+                        @change="switchsource()"
+                    >
+                    </el-switch>
+                    <br />
+                    当前总数：{{listdata.length}}
+                    <br />
+                    数据版本：{{version}}（可能存在缓存问题，可以试试刷新一下）
+                    <br />
+                    <br />
+                    项目主页：<a href="https://github.com/hellodword/wechat-feeds" target="_blank" rel="noreferrer">hellodword/wechat-feeds</a>
+                    <br />
+                    <br />
+                    感谢（排名不分先后）：
+                    <a href="https://github.com/Treblex" target="_blank" rel="noreferrer">Treblex</a>
+                </div>
+                <span slot="footer" class="dialog-footer">
+                    <el-button type="primary" @click="showhelp = false">确 定</el-button>
+                </span>
+            </el-dialog>
+
+            <el-header style="display: flex">
+                <el-input placeholder="搜索(名称/描述/bizid)" v-model="key" @input="search()" clearable></el-input>
+                <div style="vertical-align: middle; margin: 3px">
+                    <i class="el-icon-question" @click="showhelp = true" style="vertical-align: middle; font-size: 30px"></i>
+                </div>
+            </el-header>
+
+            <el-main style="overflow-y: auto">
+                <el-backtop target=".el-main"></el-backtop>
+                <ul
+                    class="infinite-list"
+                    v-loading="isloading"
+                    v-infinite-scroll="loadMore"
+                    infinite-scroll-disabled="disabled"
+                    infinite-scroll-immediate="false"
+                >
+                    <template v-for="item in showResults">
+                        <el-row type="flex" :gutter="8">
+                            <el-col style="width: 50px; right: 0px">
+                                <el-avatar icon="el-icon-user-solid" size="large" shape="circle" :src="item.head_img || ''"> </el-avatar>
+                            </el-col>
+                            <el-col>
+                                <div>
+                                    <b>{{item.name}}</b>
+                                    <font size="2" color="grey">{{formatTime(item.last_update)}}</font>
+                                </div>
+                                <div :class="`description ${item.description ? '' : 'no-description'}`">
+                                    {{item.description || '这公众号并没有什么描述'}}
+                                </div>
+                            </el-col>
+                            <el-col style="width: 30px; left: 0px">
+                                <el-tooltip content="复制"><i @click="copy(makeRssUrl(item))" class="el-icon-copy-document"></i></el-tooltip>
+                            </el-col>
+                        </el-row>
+
+                        <el-divider></el-divider>
+                    </template>
+                </ul>
+                <p class="tips" v-if="!noMore">加载中...</p>
+                <p class="tips" v-if="noMore">没有更多了</p>
+            </el-main>
+        </el-container>
+
+        <script>
+            // jsdelivr 缓存刷新没有那么及时
+            function getVersion() {
+                return fetch(`VERSION?`).then(res => res.text());
+            }
+
+            function getData(version) {
+                return fetch(`https://cdn.jsdelivr.net/gh/hellodword/wechat-feeds@${version}/details.json`, { method: 'GET' })
+                    .then(res => res.json())
+                    .then(res => {
+                        return res;
+                    });
+            }
+
+            // 防抖
+            function debounce(fn, delay = 500) {
+                let timer = null;
+                return function (...args) {
+                    let that = this;
+                    clearTimeout(timer);
+                    timer = setTimeout(() => {
+                        fn.call(that, ...args);
+                    }, delay);
+                };
+            }
+
+            let clipboard_;
+            const vm = new Vue({
+                el: '#app',
+                data() {
+                    return {
+                        version: '',
+                        showhelp: true,
+                        loading: false,
+                        indexLimit: 0,
+                        showsearch: false,
+                        github: true,
+                        isloading: true,
+                        listdata: [],
+
+                        // 搜索
+                        key: '',
+                        searchResults: [],
+                        showResults: [],
+                        search: debounce(() => {
+                            this.showResults = [];
+                            document.querySelector('.el-main').scrollTop = 0;
+                            this.searchResults = this.selectMatchItems(this.listdata, this.key);
+                            this.loadMore();
+                        }),
+                    };
+                },
+                computed: {
+                    noMore() {
+                        return this.showResults.length >= this.searchResults.length;
+                    },
+                    disabled() {
+                        return this.loading || this.noMore;
+                    },
+                },
+                created() {
+                    clipboard_ = new ClipboardJS('.copy');
+                    clipboard_.on('success', this.copied);
+                    clipboard_.on('error', function (err) {
+                        throw err;
+                    });
+
+                    setTimeout(() => {
+                        this.initSource();
+                    });
+                },
+                methods: {
+                    // https://segmentfault.com/a/1190000014795596
+                    formatTime(last_update) {
+                        if (!last_update) {
+                            return '';
+                        }
+
+                        const minute = 1000 * 60;
+                        const hour = minute * 60;
+                        const day = hour * 24;
+                        const halfamonth = day * 15;
+                        const month = day * 30;
+
+                        let now = new Date().getTime();
+                        let diffValue = now - last_update * 1000;
+                        if (diffValue < 0) {
+                            return '';
+                        }
+
+                        let monthC = diffValue / month;
+                        let weekC = diffValue / (7 * day);
+                        let dayC = diffValue / day;
+                        let hourC = diffValue / hour;
+                        let minC = diffValue / minute;
+
+                        if (monthC >= 1) {
+                            result = parseInt(monthC) + '个月前';
+                        } else if (weekC >= 1) {
+                            result = parseInt(weekC) + '周前';
+                        } else if (dayC >= 1) {
+                            result = parseInt(dayC) + '天前';
+                        } else if (hourC >= 1) {
+                            result = parseInt(hourC) + '个小时前';
+                        } else if (minC >= 1) {
+                            result = parseInt(minC) + '分钟前';
+                        } else {
+                            result = '刚刚';
+                        }
+                        return result;
+                    },
+                    async initSource() {
+                        for (let i = 0; i < 10; i++) {
+                            let version = await getVersion();
+                            version = version.trim();
+                            if (version.length !== 7) {
+                                continue;
+                            }
+                            this.version = version;
+                            getData(this.version).then(res => {
+                                this.isloading = false;
+                                res.sort(function (a, b) {
+                                    if (a.name < b.name) {
+                                        return -1;
+                                    }
+                                    if (a.name > b.name) {
+                                        return 1;
+                                    }
+                                    return 0;
+                                });
+                                this.listdata = res;
+                                this.searchResults = this.listdata;
+                                this.loadMore();
+                            });
+                            return;
+                        }
+                        this.$message({
+                            showClose: false,
+                            message: '请求最新版本失败',
+                            type: 'error',
+                        });
+                    },
+                    loadMore() {
+                        if (this.noMore) {
+                            return;
+                        }
+                        this.loading = true;
+                        this.showResults = this.showResults.concat(this.searchResults.slice(this.showResults.length, this.showResults.length + 20));
+                        this.loading = false;
+                    },
+                    copied() {
+                        this.$message({
+                            showClose: true,
+                            message: '复制成功',
+                            type: 'success',
+                        });
+                    },
+                    selectMatchItems(list, key) {
+                        return key == ''
+                            ? list
+                            : list.filter(item => {
+                                  return (
+                                      (item['name'] || '').indexOf(key) > -1 ||
+                                      (item['description'] || '').indexOf(key) > -1 ||
+                                      (item['bizid'] && item['bizid'] === key)
+                                  );
+                              });
+                    },
+                    makeRssUrl({ bizid = '' }) {
+                        return this.github
+                            ? `https://github.com/hellodword/wechat-feeds/raw/feeds/${bizid}.xml`
+                            : `https://gitee.com/BlogZ/wechat-feeds/raw/feeds/${bizid}.xml`;
+                    },
+                    switchsource() {
+                        this.$message({
+                            showClose: true,
+                            message: this.github ? '已切换到全球源' : '已切换到国内源',
+                            type: 'success',
+                        });
+                    },
+                    copy(text) {
+                        let button = document.createElement('button');
+                        button.className = 'copy';
+                        button.setAttribute('data-clipboard-text', text);
+                        document.body.appendChild(button);
+                        button.click();
+                        button.remove();
+                    },
+                },
+            });
+        </script>
+    </body>
 </html>
