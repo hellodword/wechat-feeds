@@ -255,7 +255,7 @@ feeds 托管在 github 上, 我无法获取订阅这些 feeds 的用户的任何
 ## TODO
 
 - [x] 同步 gitee 提升访问体验
-- [x] 根据 list.csv 生成列表页, 通过 pages 展示 (感谢 [Treblex](https://github.com/Treblex) 的 [Treblex/wechat-feeds-page](https://github.com/Treblex/wechat-feeds-page))
+- [x] 根据 list.csv 生成列表页, 通过 pages 展示 (感谢 [Treblex](https://github.com/Treblex) 的 [Treblex/wechat-feeds-page](https://github.com/Treblex/wechat-feeds-page), 感谢 [shulandmimi](https://github.com/shulandmimi))
 - [x] 给 pr 和 commit 添加自动 checks
 - [x] 给 issue 添加 actions, 来自动获取 bizid 等
 - [ ] 兼容迁移公众号/自动移除已屏蔽公众号
