@@ -34,14 +34,24 @@ jobs:
           echo "这个 pr 有 ${{ github.event.pull_request.commits }} 个 commits，请确保只有一个 commit，你可以关闭这个 pr 重新提一个。"
           exit 1
 
+      # - name: Get the latest commit on PR
+      #   id: get-latest-commit
+      #   uses: ActionsRML/get-PR-latest-commit@master
+
+      - name: Check out code into the Go module directory
+        uses: actions/checkout@v2
+
       - name: Get the latest commit on PR
         id: get-latest-commit
-        uses: ActionsRML/get-PR-latest-commit@master
+        run: |
+          latest_commit_message=$(git log --format=%B -n 1 ${{ github.event.after }})
+          echo "::set-output name=latest_commit_message::$latest_commit_message"
+          #  echo ::set-env name=commitmsg::$(git log --format=%B -n 1 ${{ github.event.after }})
 
       - name: print the info of the latest commit
         run: |
-          # echo "The commit message:"
-          # echo "${{ steps.get-latest-commit.outputs.latest_commit_message }}"
+          echo "The commit message:"
+          echo "${{ steps.get-latest-commit.outputs.latest_commit_message }}"
 
           # echo "The commit sha:"
           # echo "${{ steps.get-latest-commit.outputs.latest_commit_sha }}"
@@ -54,8 +64,6 @@ jobs:
             exit 1
           fi
 
-      - name: Check out code into the Go module directory
-        uses: actions/checkout@v2
 
       - name: check utf bom
         run: |
