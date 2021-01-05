@@ -11,10 +11,10 @@ jobs:
     name: check pull request
     runs-on: ubuntu-latest
     steps:
-      # - name: Dump GitHub context
-      #   env:
-      #     GITHUB_CONTEXT: ${{ toJson(github) }}
-      #   run: echo "$GITHUB_CONTEXT"
+      - name: Dump GitHub context
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: echo "$GITHUB_CONTEXT"
 
       - id: files
         uses: jitterbit/get-changed-files@v1
@@ -34,28 +34,39 @@ jobs:
           echo "这个 pr 有 ${{ github.event.pull_request.commits }} 个 commits，请确保只有一个 commit，你可以关闭这个 pr 重新提一个。"
           exit 1
 
-      - name: Get the latest commit on PR
+      - uses: actions/github-script@v3
         id: get-latest-commit
-        uses: ActionsRML/get-PR-latest-commit@master
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          result-encoding: string
+          script: |
+            console.log(JSON.stringify(context));
+            const result = await github.pulls.listCommits({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.pull_request.number,
+            });
+            return result[0].commit.message;
 
       - name: print the info of the latest commit
         run: |
-          # echo "The commit message:"
-          # echo "${{ steps.get-latest-commit.outputs.latest_commit_message }}"
+          echo "The commit message:"
+          echo "${{ steps.get-latest-commit.outputs.result }}"
 
-          # echo "The commit sha:"
-          # echo "${{ steps.get-latest-commit.outputs.latest_commit_sha }}"
-
-          # echo "The commit context:"
-          # cat ${{ steps.get-latest-commit.outputs.latest_commit_context }}
-
-          if [ "${{ steps.get-latest-commit.outputs.latest_commit_message }}" == "Update list.csv" ];then
-            echo "修改提交时的提交信息不要是默认的 Update list.csv，请仔细阅读第三步。"
+          if [ "${{ steps.get-latest-commit.outputs.result }}" == "" ];then
+            echo "list commits error"
             exit 1
           fi
 
-      - name: Check out code into the Go module directory
-        uses: actions/checkout@v2
+          if [ "${{ steps.get-latest-commit.outputs.result }}" == "undefined" ];then
+            echo "list commits error"
+            exit 1
+          fi
+
+          if [ "${{ steps.get-latest-commit.outputs.result }}" == "Update list.csv" ];then
+            echo "修改提交时的提交信息不要是默认的 Update list.csv，请仔细阅读第三步。"
+            exit 1
+          fi
 
       - name: check utf bom
         run: |
