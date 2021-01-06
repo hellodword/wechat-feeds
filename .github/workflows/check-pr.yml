@@ -8,6 +8,7 @@ on:
 
 jobs:
   check:
+    timeout-minutes: 10
     name: check pull request
     runs-on: ubuntu-latest
     steps:
@@ -48,27 +49,34 @@ jobs:
               pull_number: context.payload.number,
             });
             console.log(JSON.stringify(result));
-            return result.data[0].commit.message;
+            return result.data[0].commit.message.split("\n")[0]; // 只截取 commit message 第一行
 
-      - name: print the info of the latest commit
+
+      - name: check commit message
         run: |
           echo "The commit message:"
           echo "${{ steps.get-latest-commit.outputs.result }}"
 
-          if [ "${{ steps.get-latest-commit.outputs.result }}" == "" ];then
-            echo "list commits error"
+          if [[ ! "${{ steps.get-latest-commit.outputs.result }}" =~ ^新增:( [^ ]+){1,}$ ]]; then
+            echo '提交信息不符合格式，请仔细阅读第三步。'
+            echo '为了方便自动化，所以需要定一个格式，希望理解。'
             exit 1
           fi
 
-          if [ "${{ steps.get-latest-commit.outputs.result }}" == "undefined" ];then
-            echo "list commits error"
-            exit 1
-          fi
+          # if [ "${{ steps.get-latest-commit.outputs.result }}" == "" ];then
+          #   echo "list commits error"
+          #   exit 1
+          # fi
 
-          if [ "${{ steps.get-latest-commit.outputs.result }}" == "Update list.csv" ];then
-            echo "修改提交时的提交信息不要是默认的 Update list.csv，请仔细阅读第三步。"
-            exit 1
-          fi
+          # if [ "${{ steps.get-latest-commit.outputs.result }}" == "undefined" ];then
+          #   echo "list commits error"
+          #   exit 1
+          # fi
+
+          # if [ "${{ steps.get-latest-commit.outputs.result }}" == "Update list.csv" ];then
+          #   echo "修改提交时的提交信息不要是默认的 Update list.csv，请仔细阅读第三步。"
+          #   exit 1
+          # fi
 
       - name: Check out code into the Go module directory
         uses: actions/checkout@v2
@@ -79,6 +87,13 @@ jobs:
               echo "list.csv 必须是 UTF8-BOM，请不要修改格式"
               exit 1
           fi
+
+      # - name: Turnstyle
+      #   uses: softprops/turnstyle@v1
+      #   with:
+      #    continue-after-seconds: 180
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set up Go 1.x
         uses: actions/setup-go@v2
