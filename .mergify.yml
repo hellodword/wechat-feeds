@@ -14,7 +14,13 @@ pull_request_rules:
 
           如果运行失败，进入 [Checks](https://github.com/hellodword/wechat-feeds/pull/{{number}}/checks)，点击左侧的 `check pr`，查看具体的失败原因，并根据原因进行修改。
 
-          如果不了解 force push，那么建议点击下方 close 关闭 pr 并重新提一个。
+          为了方便自动化，如果需要修改，目前不建议 force push，建议点击下方 close 关闭 pr 并重新提一个 pr。
+
+          如果一切正常却依然 merge 失败，请查看 [这个页面](https://github.com/hellodword/wechat-feeds/pulls?q=is%3Apr) 查看是否是因为有其它 pr 在这个 pr 运行自动检查期间被 merge 造成了冲突。
+
+          如果自动检查很长时间没有运行，可能是 github 服务宕机，你可以点击下方 close 关闭 pr 并重新提一个 pr 来尝试触发。
+
+          如果你确定一切都没有问题依然没有被 merge，那么可以评论等待 @hellodword 手动处理。
 
   - name: automatic merge for master when CI passes
     conditions:
