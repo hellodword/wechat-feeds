@@ -1,0 +1,51 @@
+name: sync pages
+
+on: 
+  push:
+    branches:
+      - "pages"
+
+jobs:
+  check:
+    timeout-minutes: 30
+    name: sync-pages
+    runs-on: ubuntu-latest
+    steps:
+      # - name: Dump GitHub context
+      #   env:
+      #     GITHUB_CONTEXT: ${{ toJson(github) }}
+      #   run: echo "$GITHUB_CONTEXT"
+
+      - name: Check out code into the Go module directory
+        uses: actions/checkout@v2
+
+      - id: set_commit_message
+        run: |
+          echo ::set-output name=COMMIT_MSG::$(git rev-parse --short HEAD)
+
+      - id: debug
+        run: |
+          echo "${{ steps.set_commit_message.outputs.COMMIT_MSG }}"
+
+      - name: sync to gitee
+        run: |
+          rm -rf .git
+          git init
+          git remote add origin "https://gitee.com/${{ secrets.YOUR_GITEE_NAME }}/${{ secrets.TARGET_NAME }}.git"  >/dev/null 2>&1
+          git config user.name    "${{ secrets.YOUR_GITEE_NAME }}"
+          git config user.email   "${{ secrets.YOUR_GITEE_EMAIL }}"
+          git add .
+          git gc
+          git commit -m "${{ steps.set_commit_message.outputs.COMMIT_MSG }}" >/dev/null 2>&1
+          git checkout -b pages  >/dev/null 2>&1
+          git branch -d master  >/dev/null 2>&1
+          git push -f --repo "https://${{ secrets.YOUR_GITEE_NAME }}:${{ secrets.YOUR_GITEE_PWD }}@gitee.com/${{ secrets.YOUR_GITEE_NAME }}/${{ secrets.TARGET_NAME }}.git"  >/dev/null 2>&1
+
+      - name: page rebuild
+        run: |
+          response=$(curl -s --request POST --url "${{ secrets.YOUR_GITEE_REBUILD_URL }}" -H "${{ secrets.YOUR_GITEE_REBUILD_HEADER }}" --data "${{ secrets.YOUR_GITEE_REBUILD_DATA }}")
+          
+          if [[ "${response}" != "ok" ]]; then
+              echo "${response}"
+              exit 1
+          fi
