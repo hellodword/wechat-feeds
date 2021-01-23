@@ -1,9 +1,10 @@
 name: sync feeds
 
 on: 
-  push:
-    branches:
-      - "feeds"
+  page_build:
+  # push:
+  #   branches: # feeds branch has too much commits
+  #     - "main"
 
 jobs:
   check:
@@ -18,6 +19,8 @@ jobs:
 
       - name: Check out code into the Go module directory
         uses: actions/checkout@v2
+        with:
+          ref: 'feeds'
 
       - id: set_commit_message
         run: |
