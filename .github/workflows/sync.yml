@@ -2,9 +2,9 @@ name: sync feeds
 
 on: 
   page_build:
-  push:
-    branches: # feeds branch has too much commits
-      - "main"
+  # push:
+  #   branches: # feeds branch has too much commits
+  #     - "main"
 
 jobs:
   check:
@@ -17,8 +17,7 @@ jobs:
       #     GITHUB_CONTEXT: ${{ toJson(github) }}
       #   run: echo "$GITHUB_CONTEXT"
 
-      - name: Check out code into the Go module directory
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v2
         with:
           ref: 'feeds'
           path: 'feeds'
@@ -50,8 +49,7 @@ jobs:
 
 
 
-      - name: Check out code into the Go module directory
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v2
         with:
           ref: 'pages'
           path: 'pages'
