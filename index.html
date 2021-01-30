@@ -98,7 +98,7 @@
 
     <body>
         <el-container id="app" style="height: 100%">
-            <el-dialog title="帮助" :visible.sync="showhelp" width="85%">
+            <el-dialog title="帮助" :visible.sync="showhelp" :close-on-click-modal="false" :close-on-press-escape="false" :show-close="false" width="85%">
                 <div>
                     <a
                         href="https://github.com/hellodword/wechat-feeds#%E5%A6%82%E4%BD%95%E6%B7%BB%E5%8A%A0%E4%BF%AE%E6%94%B9%E5%85%AC%E4%BC%97%E5%8F%B7"
