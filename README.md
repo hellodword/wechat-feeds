@@ -20,6 +20,7 @@
       * [feeds](#feeds)
       * [pages](#pages)
    * [TODO](#todo)
+   * [更新状态](#更新状态)
    * [捐赠](#捐赠)
 
 ---
@@ -266,6 +267,11 @@ feeds 托管在 github 上, 我无法获取订阅这些 feeds 的用户的任何
 
 ---
 
+## 更新状态
+
+[更新状态](https://github.com/hellodword/wechat-feeds/issues/608#issuecomment-new)
+
+---
 ## 捐赠
 
 本项目使用完全免费. 但有一定的维护成本, 故此处开放捐赠, 但不对捐赠者做任何关于本项目的额外的承诺, 亦不会在项目中主动公开捐赠者信息. 
