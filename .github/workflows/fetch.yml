@@ -19,7 +19,7 @@ jobs:
     if: |
       github.event_name == 'issues' && github.event.action == 'opened'
     steps:
-      - uses: actions/github-script@0.4.0
+      - uses: actions/github-script@v3
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
@@ -29,6 +29,7 @@ jobs:
               issue_number: context.issue.number,
               labels: ['fetch']
             })
+
   issue:
     name: issue execute
     needs: format
@@ -44,9 +45,11 @@ jobs:
       - name: fetch
         id: fetch
         run: |
-          url=$(echo "${{ github.event.issue.body }}" | head -1)
-          echo "debug url ${url}"
+          url=$(echo "${{ github.event.issue.body }}" | grep -oP "^[^\s]+")
+          url=$(echo "${url}" | head -1)
+          echo "debug url [${url}]"
           response=$(curl -s -L "${url}") || true
+          echo "${response}"
           echo "after response"
           if [[ "${response}" =~ "该公众号已迁移至新的帐号，原帐号已回收。若需访问原文章链接，请点击下方按钮。" ]]; then
             url=$(echo "${response}" | grep -oP "(?<=transferTargetLink = ')http://mp.weixin.qq.com/[^'\n\r]+(?=')") || true
@@ -86,7 +89,7 @@ jobs:
             echo ::set-output name=bizid::$(echo "${bizid}")
           fi
 
-      - uses: actions/github-script@0.4.0
+      - uses: actions/github-script@v3
         if: |
           steps.fetch.outputs.status == 'ok'
         with:
@@ -99,7 +102,7 @@ jobs:
               body: "\`${{ steps.fetch.outputs.fetchresult }}\`\n\n[RSS链接](https://github.com/hellodword/wechat-feeds/raw/feeds/${{ steps.fetch.outputs.bizid }}.xml) | [国内链接](https://gitee.com/BlogZ/wechat-feeds/raw/feeds/${{ steps.fetch.outputs.bizid }}.xml)"
             })
 
-      - uses: actions/github-script@0.4.0
+      - uses: actions/github-script@v3
         if: |
           steps.fetch.outputs.status == 'error'
         with:
@@ -112,7 +115,7 @@ jobs:
               body: "自动抓取失败, 请尝试手动获取"
             })
 
-      - uses: actions/github-script@0.4.0
+      - uses: actions/github-script@v3
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
