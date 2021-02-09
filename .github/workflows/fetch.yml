@@ -47,6 +47,7 @@ jobs:
           url=$(echo "${{ github.event.issue.body }}" | head -1)
           echo "debug url ${url}"
           response=$(curl -s -L "${url}") || true
+          echo "${response}"
           echo "after response"
           if [[ "${response}" =~ "该公众号已迁移至新的帐号，原帐号已回收。若需访问原文章链接，请点击下方按钮。" ]]; then
             url=$(echo "${response}" | grep -oP "(?<=transferTargetLink = ')http://mp.weixin.qq.com/[^'\n\r]+(?=')") || true
