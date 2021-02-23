@@ -20,7 +20,7 @@ pull_request_rules:
 
           如果自动检查很长时间没有运行，可能是 github 服务宕机，你可以点击下方 close 关闭 pr 并重新提一个 pr 来尝试触发。
 
-          如果你确定一切都没有问题依然没有被 merge，那么可以评论等待 @hellodword 手动处理。
+          如果你确定一切都没有问题依然没有被 merge，那么可以 `@hellodword` 等待手动处理。
 
   - name: automatic merge for master when CI passes
     conditions:
@@ -57,7 +57,7 @@ pull_request_rules:
 
           如果自动检查很长时间没有运行，可能是 github 服务宕机，你可以点击下方 close 关闭 pr 并重新提一个 pr 来尝试触发。
 
-          如果你确定一切都没有问题依然没有被 merge，那么可以评论等待 @hellodword 手动处理。
+          如果你确定一切都没有问题依然没有被 merge，那么可以 `@hellodword` 等待手动处理。
 
   - name: ask to resolve conflict
     conditions:
@@ -70,7 +70,7 @@ pull_request_rules:
 
           感谢你的 pr！
 
-          这个 PR 发生了冲突，需要你处理一下冲突
+          这个 PR 已经冲突，需要你处理一下冲突
 
           如果对于 git 不熟悉，你可以理解成重新按照 [如何添加公众号](https://github.com/hellodword/wechat-feeds#%E5%A6%82%E4%BD%95%E6%B7%BB%E5%8A%A0%E4%BF%AE%E6%94%B9%E5%85%AC%E4%BC%97%E5%8F%B7) 的流程来一遍。
 
