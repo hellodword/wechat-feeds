@@ -34,7 +34,7 @@ pull_request_rules:
       merge:
         method: rebase
         strict: true
-      close:
+      comment:
         message: |
           @{{author}}，
 
