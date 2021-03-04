@@ -5,6 +5,7 @@ on:
       - "list.csv"
     branches:
       - main
+    types: [opened]
 
 jobs:
   check:
