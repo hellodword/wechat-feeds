@@ -8,7 +8,7 @@ on:
 
 jobs:
   check:
-    timeout-minutes: 10
+    timeout-minutes: 30
     name: check pull request
     runs-on: ubuntu-latest
     steps:
@@ -16,6 +16,22 @@ jobs:
       #   env:
       #     GITHUB_CONTEXT: ${{ toJson(github) }}
       #   run: echo "$GITHUB_CONTEXT"
+
+      - name: wait for other pr
+        run: |
+          cd wait-for-other-pr-check
+          go run main.go
+
+      # - uses: shogo82148/actions-mutex@v1
+      #   with:
+      #     key: check-pr-mutex
+
+      # - name: Turnstyle
+      #   uses: softprops/turnstyle@v1
+      #   with:
+      #    continue-after-seconds: 180
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - id: files
         uses: jitterbit/get-changed-files@v1
@@ -88,12 +104,6 @@ jobs:
               exit 1
           fi
 
-      # - name: Turnstyle
-      #   uses: softprops/turnstyle@v1
-      #   with:
-      #    continue-after-seconds: 180
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set up Go 1.x
         uses: actions/setup-go@v2
