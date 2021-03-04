@@ -34,7 +34,7 @@ pull_request_rules:
       merge:
         method: rebase
         strict: true
-      close:
+      comment:
         message: |
           @{{author}}，
 
@@ -65,7 +65,7 @@ pull_request_rules:
 
           **仔细阅读以下提示文字**
 
-          如果运行失败，进入 [Checks](https://github.com/hellodword/wechat-feeds/pull/{{number}}/checks)，点击左侧的 `check pr`，查看具体的失败原因，并根据原因进行修改。
+          这个 pr 发生了失败，进入 [Checks](https://github.com/hellodword/wechat-feeds/pull/{{number}}/checks)，点击左侧的 `check pr`，查看具体的失败原因，并根据原因进行修改。
 
           为了方便自动化，如果需要修改，目前不接受 force push/reopen，可以按照 [如何添加公众号](https://github.com/hellodword/wechat-feeds#%E5%A6%82%E4%BD%95%E6%B7%BB%E5%8A%A0%E4%BF%AE%E6%94%B9%E5%85%AC%E4%BC%97%E5%8F%B7) 的流程重新提交一个 pr。
 
