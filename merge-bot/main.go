@@ -68,7 +68,7 @@ func main() {
 
 	clientWithToken, client := makeClients(ctx)
 	_, _ = clientWithToken, client
-	// client = clientWithToken // for private test
+	client = clientWithToken // for private test
 
 	createdAt := time.Now()
 
