@@ -98,6 +98,8 @@ func main() {
 			continue
 		}
 
+		fmt.Println("MergeableState", pr.GetMergeableState(), "Mergeable", pr.GetMergeable())
+
 		fmt.Printf("checkPRDetails #%d\n", pr.GetNumber())
 		if !checkPRDetails(ctx, clientWithToken, client, pr) {
 			fmt.Printf("checkPRDetails #%d failed\n", pr.GetNumber())
@@ -106,6 +108,7 @@ func main() {
 		}
 
 		fmt.Printf("merging #%d\n", pr.GetNumber())
+		fmt.Println("MergeableState", pr.GetMergeableState(), "Mergeable", pr.GetMergeable())
 		_, _, err := clientWithToken.PullRequests.Merge(ctx, Owner, Repo, pr.GetNumber(), "",
 			&github.PullRequestOptions{
 				MergeMethod: "rebase",
@@ -113,7 +116,7 @@ func main() {
 		if err != nil {
 			fmt.Printf("merge #%d failed\n", pr.GetNumber())
 			closePR(ctx, clientWithToken, pr, LabelInvalid,
-				fmt.Sprintf("合并出错: %s", err.Error()))
+				fmt.Sprintf("合并出错, 多半是已经冲突了, 重来吧: %s", err.Error()))
 		} else {
 			fmt.Printf("merge #%d succeeded\n", pr.GetNumber())
 			_, _, _ = clientWithToken.Issues.CreateComment(ctx, Owner, Repo, pr.GetNumber(),
