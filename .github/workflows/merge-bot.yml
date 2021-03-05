@@ -1,0 +1,51 @@
+name: merge-bot
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - ".github/workflows/merge-bot.yml"
+  schedule:
+    - cron: "*/30 * * * *" # Runs every first and 30th minute
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.15
+
+      # - name: Dump GitHub context
+      #   env:
+      #     GITHUB_CONTEXT: ${{ toJson(github) }}
+      #   run: echo "$GITHUB_CONTEXT"
+
+      # - run: |
+      #     echo "GITHUB_WORKFLOW = ${GITHUB_WORKFLOW}"
+      #     echo "GITHUB_RUN_ID = ${GITHUB_RUN_ID}"
+      #     echo "GITHUB_RUN_NUMBER = ${GITHUB_RUN_NUMBER}"
+      #     echo "GITHUB_ACTION = ${GITHUB_ACTION}"
+      #     echo "GITHUB_ACTIONS = ${GITHUB_ACTIONS}"
+      #     echo "GITHUB_ACTOR = ${GITHUB_ACTOR}"
+      #     echo "GITHUB_REPOSITORY = ${GITHUB_REPOSITORY}"
+      #     echo "GITHUB_EVENT_NAME = ${GITHUB_EVENT_NAME}"
+      #     echo "GITHUB_EVENT_PATH = ${GITHUB_EVENT_PATH}"
+      #     echo "GITHUB_WORKSPACE = ${GITHUB_WORKSPACE}"
+      #     echo "GITHUB_SHA = ${GITHUB_SHA}"
+      #     echo "GITHUB_REF = ${GITHUB_REF}"
+      #     echo "GITHUB_HEAD_REF = ${GITHUB_HEAD_REF}"
+      #     echo "GITHUB_BASE_REF = ${GITHUB_BASE_REF}"
+      #     echo "GITHUB_SERVER_URL = ${GITHUB_SERVER_URL}"
+
+      - run: |
+          cd merge-bot
+          go get -v -t -d ./...
+          go run main.go
+        env:
+          GITHUB_ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_RUN_NUMBER: ${GITHUB_RUN_NUMBER}
+          # GITHUB_ACTION: ${GITHUB_ACTION}
