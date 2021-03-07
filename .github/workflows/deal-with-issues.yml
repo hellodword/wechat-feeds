@@ -1,8 +1,7 @@
-name: check failed bizid
-
+name: deal with issues
 on:
-  workflow_dispatch:
-  page_build:
+  issues:
+    types: [opened]
 
 jobs:
   build:
@@ -23,6 +22,6 @@ jobs:
       - name: Run
         id: check
         run: |
-          go run ./check-failed-biz
+          go run ./deal-with-issues
         env:
           GITHUB_ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}

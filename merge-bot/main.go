@@ -3,20 +3,16 @@ package main
 import (
 	"bytes"
 	"context"
-	"encoding/base64"
 	"fmt"
-	"io/ioutil"
-	"net/http"
+	"github.com/hellodword/wechat-feeds/common"
 	"os"
 	"regexp"
 	"sort"
-	"strconv"
 	"strings"
 	"time"
 
 	"github.com/gocarina/gocsv"
 	"github.com/google/go-github/v33/github"
-	"golang.org/x/oauth2"
 )
 
 const (
@@ -32,21 +28,9 @@ const (
 	PRState = "open"
 
 	WorkFlow = "merge-bot"
-)
 
-type State string
-
-const (
-	StateClosed State = "closed"
-)
-
-type Label string
-
-const (
-	LabelUB      Label = "ub"
-	LabelInvalid Label = "invalid"
-	LabelMerged  Label = "merged"
-	LabelError   Label = "error"
+	ServiceMax = 10000
+	ServicePer = 32
 )
 
 type bizInfo struct {
@@ -63,12 +47,12 @@ func main() {
 
 	ctx := context.Background()
 
-	runNumber := getIntFromEnv("GITHUB_RUN_NUMBER")
-	_ = runNumber
-
-	clientWithToken, client := makeClients(ctx)
+	clientWithToken, client := common.MakeClients(ctx, os.Getenv("GITHUB_ACCESS_TOKEN"))
 	_, _ = clientWithToken, client
 	client = clientWithToken // for private test
+
+	runNumber := common.GetIntFromEnv("GITHUB_RUN_NUMBER")
+	_ = runNumber
 
 	createdAt := time.Now()
 
@@ -115,7 +99,7 @@ func main() {
 			})
 		if err != nil {
 			fmt.Printf("merge #%d failed\n", pr.GetNumber())
-			closePR(ctx, clientWithToken, pr, LabelInvalid,
+			closePR(ctx, clientWithToken, pr, common.LabelInvalid,
 				fmt.Sprintf("合并出错, 多半是已经冲突了, 重来吧: %s", err.Error()))
 		} else {
 			fmt.Printf("merge #%d succeeded\n", pr.GetNumber())
@@ -131,36 +115,11 @@ func main() {
 	os.Exit(0)
 }
 
-func checkBizIDSimple(bizid string) bool {
-	if bizid == "" {
-		return false
-	}
-	b, e := base64.StdEncoding.DecodeString(bizid)
-	if e != nil {
-		return false
-	}
-	if base64.StdEncoding.EncodeToString(b) != bizid {
-		return false
-	}
-	s := string(b)
-	if s == "" {
-		return false
-	}
-
-	i, e := strconv.Atoi(s)
-	if e != nil {
-		return false
-	}
-	if i <= 0 {
-		return false
-	}
-	return strconv.Itoa(i) == s
-}
-
 func checkCommitMessage(s string) bool {
 	return regexp.MustCompile(`^新增:( [^\s\n\r]+)+$`).MatchString(s)
 }
 
+// 150 lines
 func checkPRDetails(ctx context.Context, clientWithToken, client *github.Client, pr *github.PullRequest) bool {
 	cs, _, err := client.PullRequests.ListCommits(ctx, Owner, Repo, pr.GetNumber(),
 		&github.ListOptions{
@@ -172,7 +131,7 @@ func checkPRDetails(ctx context.Context, clientWithToken, client *github.Client,
 	}
 
 	if len(cs) != 1 {
-		closePR(ctx, clientWithToken, pr, LabelInvalid,
+		closePR(ctx, clientWithToken, pr, common.LabelInvalid,
 			fmt.Sprintf("这个 pr 有 %d 个 commits，请确保只有一个 commit，你可以关闭这个 pr 重新提一个。", len(cs)))
 		return false
 	}
@@ -183,7 +142,7 @@ func checkPRDetails(ctx context.Context, clientWithToken, client *github.Client,
 	}
 
 	if !checkCommitMessage(strings.Split(cs[0].GetCommit().GetMessage(), "\n")[0]) {
-		closePR(ctx, clientWithToken, pr, LabelInvalid,
+		closePR(ctx, clientWithToken, pr, common.LabelInvalid,
 			"提交信息不符合格式，仔细阅读第三步。\n为了方便自动化，所以需要定一个格式，希望理解。")
 		return false
 	}
@@ -199,7 +158,7 @@ func checkPRDetails(ctx context.Context, clientWithToken, client *github.Client,
 	}
 
 	if len(fs) != 1 || fs[0].GetFilename() != "list.csv" {
-		closePR(ctx, clientWithToken, pr, LabelInvalid,
+		closePR(ctx, clientWithToken, pr, common.LabelInvalid,
 			fmt.Sprintf("这个 pr 修改了 %d 个文件，请确保只修改了 list.csv", len(fs)))
 		return false
 	}
@@ -211,17 +170,17 @@ func checkPRDetails(ctx context.Context, clientWithToken, client *github.Client,
 	// b, _ := a.GetContent()
 	// newBody := []byte(b)
 
-	newBody := fetch(fs[0].GetRawURL())
-	if !withUTF8Bom(newBody) {
-		closePR(ctx, clientWithToken, pr, LabelInvalid,
+	newBody := common.Fetch(fs[0].GetRawURL())
+	if !common.WithUTF8Bom(newBody) {
+		closePR(ctx, clientWithToken, pr, common.LabelInvalid,
 			"list.csv 必须是 UTF8-BOM，请不要修改格式")
 		return false
 	}
 
 	var newBis []*bizInfo
-	err = gocsv.Unmarshal(bytes.NewReader(newBody[3:]), &newBis)
+	err = gocsv.Unmarshal(bytes.NewReader(common.TrimUTF8Bom(newBody)), &newBis)
 	if err != nil {
-		closePR(ctx, clientWithToken, pr, LabelInvalid,
+		closePR(ctx, clientWithToken, pr, common.LabelInvalid,
 			fmt.Sprintf("list.csv 解析失败: %s", err.Error()))
 		return false
 	}
@@ -229,13 +188,13 @@ func checkPRDetails(ctx context.Context, clientWithToken, client *github.Client,
 	var oldBody []byte
 	var oldBis []*bizInfo
 	for {
-		oldBody = fetch("https://github.com/hellodword/wechat-feeds/raw/main/list.csv") // fetch(fs[0].GetRawURL())
-		if !withUTF8Bom(oldBody) {
+		oldBody = common.Fetch("https://github.com/hellodword/wechat-feeds/raw/main/list.csv") // fetch(fs[0].GetRawURL())
+		if !common.WithUTF8Bom(oldBody) {
 			fmt.Println("???", string(oldBody))
 			continue
 		}
 
-		err = gocsv.Unmarshal(bytes.NewReader(oldBody[3:]), &oldBis)
+		err = gocsv.Unmarshal(bytes.NewReader(common.TrimUTF8Bom(oldBody)), &oldBis)
 		if err != nil {
 			fmt.Println("???", err, string(oldBody))
 			continue
@@ -243,22 +202,27 @@ func checkPRDetails(ctx context.Context, clientWithToken, client *github.Client,
 		break
 	}
 
-	if len(oldBis) >= 10000 {
-		closePR(ctx, clientWithToken, pr, LabelInvalid,
-			fmt.Sprintf("已超过本服务限额 10000 个公众号，暂不接受添加新的公众号: %d", len(oldBis)))
+	if len(oldBis) >= ServiceMax {
+		closePR(ctx, clientWithToken, pr, common.LabelInvalid,
+			fmt.Sprintf("已超过本服务限额 %d 个公众号，暂不接受添加新的公众号: %d",
+				ServiceMax,
+				len(oldBis)))
 		return false
 	}
 
 	fmt.Println(len(newBis), len(oldBis))
 	if len(newBis)-len(oldBis) <= 0 {
-		closePR(ctx, clientWithToken, pr, LabelInvalid,
+		closePR(ctx, clientWithToken, pr, common.LabelInvalid,
 			fmt.Sprintf("原条目 %d，新条目 %d", len(oldBis), len(newBis)))
 		return false
 	}
 
-	if len(newBis)-len(oldBis) > 32 {
-		closePR(ctx, clientWithToken, pr, LabelInvalid,
-			fmt.Sprintf("条目变化 %d 多于 32，每次请不要添加多于 32 个公众号", len(newBis)-len(oldBis)))
+	if len(newBis)-len(oldBis) > ServicePer {
+		closePR(ctx, clientWithToken, pr, common.LabelInvalid,
+			fmt.Sprintf("条目变化 %d 多于 %d，每次请不要添加多于 %d 个公众号",
+				len(newBis)-len(oldBis),
+				ServicePer,
+				ServicePer))
 		return false
 	}
 
@@ -275,7 +239,7 @@ LABEL1:
 	}
 
 	if len(deleted) != 0 {
-		closePR(ctx, clientWithToken, pr, LabelInvalid,
+		closePR(ctx, clientWithToken, pr, common.LabelInvalid,
 			fmt.Sprintf("自助添加不支持删除公众号，如果确定需要删除，请 `@hellodword` 等待手动处理"))
 		return false
 	}
@@ -285,8 +249,8 @@ LABEL1:
 	m := map[string]int8{}
 	for i := range newBis {
 
-		if !checkBizIDSimple(newBis[i].BizID) {
-			closePR(ctx, clientWithToken, pr, LabelInvalid,
+		if !common.CheckBizIDSimple(newBis[i].BizID) {
+			closePR(ctx, clientWithToken, pr, common.LabelInvalid,
 				fmt.Sprintf("解析出无效的 bizid   %s", newBis[i].BizID))
 			return false
 		}
@@ -300,7 +264,7 @@ LABEL1:
 	}
 
 	if len(duplicated) != 0 {
-		closePR(ctx, clientWithToken, pr, LabelInvalid,
+		closePR(ctx, clientWithToken, pr, common.LabelInvalid,
 			fmt.Sprintf("以下 bizid 重复，请重新提交\n\n%s", strings.Join(duplicated, "\n")))
 		return false
 	}
@@ -308,25 +272,11 @@ LABEL1:
 	return true
 }
 
-func fetch(u string) []byte {
-	res, err := http.Get(u)
-	if err != nil {
-		return nil
-	}
-	defer func() { _ = res.Body.Close() }()
-	body, _ := ioutil.ReadAll(res.Body)
-	return body
-}
-
-func withUTF8Bom(body []byte) bool {
-	return len(body) > 3 && body[0] == 0xef && body[1] == 0xbb && body[2] == 0xbf
-}
-
 func wrapCommentWithHeader(s string) string {
 	return fmt.Sprintf("**下方消息由 merge-bot 自动发送, 请仔细阅读**\n\n**错误提示**: \n%s\n\n如果你 **很确定以上错误提示不是你的问题**, 可以 `@hellodword` 呼叫作者", s)
 }
 
-func closePR(ctx context.Context, clientWithToken *github.Client, pr *github.PullRequest, label Label, comment string) {
+func closePR(ctx context.Context, clientWithToken *github.Client, pr *github.PullRequest, label common.Label, comment string) {
 	fmt.Printf("closing pr #%d %s %s\n", pr.GetNumber(), pr.GetTitle(), label)
 
 	_, _, err := clientWithToken.Issues.AddLabelsToIssue(ctx, Owner, Repo, pr.GetNumber(), []string{string(label)})
@@ -334,7 +284,7 @@ func closePR(ctx context.Context, clientWithToken *github.Client, pr *github.Pul
 		fmt.Println("AddLabelsToIssue")
 	}
 
-	pr.State = github.String(string(StateClosed))
+	pr.State = github.String(string(common.StateClosed))
 	_, _, err = clientWithToken.PullRequests.Edit(ctx, Owner, Repo, pr.GetNumber(), pr)
 	if err != nil {
 		fmt.Println("Edit")
@@ -371,12 +321,12 @@ func getPR(ctx context.Context, clientWithToken, client *github.Client) *github.
 	for i := range prs {
 		fmt.Println(prs[i].Title, len(prs[i].Labels), prs[i].MergedAt != nil, prs[i].GetMergeable(), prs[i].GetMergeableState())
 		if len(prs[i].Labels) > 0 {
-			closePR(ctx, clientWithToken, prs[i], LabelUB,
+			closePR(ctx, clientWithToken, prs[i], common.LabelUB,
 				"不支持此操作，请不要再尝试 reopen 这个 pr")
 			continue
 		}
 		if prs[i].MergedAt != nil {
-			closePR(ctx, clientWithToken, prs[i], LabelUB,
+			closePR(ctx, clientWithToken, prs[i], common.LabelUB,
 				"不支持此操作，请不要再尝试 reopen 这个 pr")
 			continue
 		}
@@ -428,33 +378,4 @@ func getBeginTime(ctx context.Context, client *github.Client, num int) (time.Tim
 
 	panic("can not find this run num")
 
-}
-
-func getIntFromEnv(key string) int {
-	s := os.Getenv(key)
-	if s == "" {
-		panic(fmt.Errorf("no %s", key))
-	}
-
-	num, err := strconv.Atoi(s)
-	if err != nil {
-		panic(err)
-	}
-	return num
-}
-
-func makeClients(ctx context.Context) (clientWithToken, client *github.Client) {
-	token := os.Getenv("GITHUB_ACCESS_TOKEN")
-	if token == "" {
-		panic("no GITHUB_ACCESS_TOKEN")
-	}
-
-	ts := oauth2.StaticTokenSource(
-		&oauth2.Token{AccessToken: token},
-	)
-	tc := oauth2.NewClient(ctx, ts) // Transport
-	clientWithToken = github.NewClient(tc)
-
-	client = github.NewClient(nil) // 规避 API Rate limit
-	return
 }

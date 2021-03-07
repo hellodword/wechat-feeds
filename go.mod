@@ -1,4 +1,4 @@
-module merge-bot
+module github.com/hellodword/wechat-feeds
 
 go 1.15
 

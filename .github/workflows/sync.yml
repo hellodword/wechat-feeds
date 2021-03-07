@@ -2,9 +2,7 @@ name: sync feeds
 
 on: 
   page_build:
-  # push:
-  #   branches: # feeds branch has too much commits
-  #     - "main"
+  workflow_dispatch:
 
 jobs:
   check:

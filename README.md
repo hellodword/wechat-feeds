@@ -137,7 +137,7 @@
 
 ![](img/bizid-01.png)
 
-2. 在 [这里](https://github.com/hellodword/wechat-feeds/issues/new) 新开一个 issue, 标题随便填写, 内容填上链接, github actions 会自动抓取和回复数据, 只需要等待一会然后复制就可以了. 参考 [#29](https://github.com/hellodword/wechat-feeds/issues/29). 只监听新开 issue 的事件, edit 无效. 如果失败, 请 [手动获取](#手动获取)
+2. 在 [这里](https://github.com/hellodword/wechat-feeds/issues/new) 新开一个 issue, 标题随便填写, 内容填上链接, github actions 会自动抓取和回复数据, 只需要等待一会然后复制就可以了. 参考 [#1536](https://github.com/hellodword/wechat-feeds/issues/1536). 只监听新开 issue 的事件, edit 无效. 如果失败, 请 [手动获取](#手动获取)
 
 #### 手动获取
 
