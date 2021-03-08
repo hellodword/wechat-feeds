@@ -170,6 +170,8 @@ feeds 托管在 github 上, 我无法获取订阅这些 feeds 的用户的任何
 
 2020/10/5: 在列表页新增了 [GA](https://github.com/hellodword/wechat-feeds/blob/82c14ebd869fe11618142d9a04b487b53988dd3e/index.html#L22-L30), 只是为了统计一下列表页的使用情况, 如有介意, 可以使用 [list.csv](https://github.com/hellodword/wechat-feeds/blob/main/list.csv) 代替列表页.
 
+2021/03/07: [#895](https://github.com/hellodword/wechat-feeds/issues/895) 图标的实现会请求一台服务器, 代码见 [favicon](https://github.com/hellodword/wechat-feeds/tree/favicon), 我承诺我没有记录数据, 但我觉得就算我被信任, 这种仅仅建立在对个体的信任上的方式不健康, 有隐私风险, 大家有什么好的办法可以 issue 与我交流
+
 ### 是如何爬取的?
 
 真实: 全部是我一条一条定时手动抄录的, 一个小时最多抄录两万个公众号的内容.
