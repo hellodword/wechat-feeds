@@ -2,34 +2,6 @@
 
 <div align=center><img src="img/wechat.png" height="160" width="160" /></div>
 
-* [WeChat-Feeds](#wechat-feeds)
-   * [声明](#声明)
-   * [如何使用](#如何使用)
-   * [如何添加/修改公众号](#如何添加修改公众号)
-   * [FAQ](#faq)
-      * [如何获取 bizid?](#如何获取-bizid)
-      * [服务是否稳定?](#服务是否稳定)
-      * [feeds 更新频率如何?](#feeds-更新频率如何)
-      * [数量是否有上限?](#数量是否有上限)
-      * [是否有隐私风险?](#是否有隐私风险)
-      * [是如何爬取的?](#是如何爬取的)
-      * [csv 转义方式](#csv-转义方式)
-      * [文章更新时间为什么对不上?](#文章更新时间为什么对不上)
-   * [结构](#结构)
-      * [main](#main)
-      * [feeds](#feeds)
-      * [pages](#pages)
-   * [TODO](#todo)
-   * [更新状态](#更新状态)
-   * [捐赠](#捐赠)
-
----
-
-> 给微信公众号生成 RSS 订阅源  
-
-> 列表页 [https://wechat.privacyhide.com/](https://wechat.privacyhide.com/)  
-
-> 有什么需要频繁交流的问题和建议可以在 [![聊天室](https://badges.gitter.im/wechat-feeds/chat.svg)](https://gitter.im/wechat-feeds/chat?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge) 交流, 当然在这之前建议先阅读本文档.  
 
 <p align="center">
    <a href="https://gitter.im/wechat-feeds/chat?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge" alt="Gitter">
@@ -77,12 +49,47 @@
 </p>
 
 
+* [WeChat-Feeds](#wechat-feeds)
+   * [声明](#声明)
+   * [隐私风险](#隐私风险)
+   * [如何使用](#如何使用)
+   * [如何添加/修改公众号](#如何添加修改公众号)
+   * [FAQ](#faq)
+      * [如何获取 bizid?](#如何获取-bizid)
+      * [服务是否稳定?](#服务是否稳定)
+      * [feeds 更新频率如何?](#feeds-更新频率如何)
+      * [数量是否有上限?](#数量是否有上限)
+      * [是如何爬取的?](#是如何爬取的)
+      * [csv 转义方式](#csv-转义方式)
+      * [文章更新时间为什么对不上?](#文章更新时间为什么对不上)
+   * [TODO](#todo)
+   * [交流](#交流)
+   * [更新状态](#更新状态)
+   * [捐赠](#捐赠)
+
+---
+
+> 给微信公众号生成 RSS 订阅源  
+
+> 列表页 [https://wechat.privacyhide.com/](https://wechat.privacyhide.com/)  
+
+
 众所周知, 微信公众号比较封闭, 爬取也有一定门槛, 对于 RSS 重度用户来说很不友好, 加上如今订阅号的推送也是乱序时间轴的, 作为在推荐算法的重重包围下做挣扎的一员, 希望在此借助 Github 为同好提供有限的订阅服务.
 
 ---
 ## 声明
 
 收录的公众号均来自网友提交或者采集自公开榜单, 不代表任何立场; 所有内容均为手动抄录, 未进行任何逆向工程.
+
+---
+
+## 隐私风险
+
+~~feeds 托管在 github 上, 所以我无法获取订阅这些 feeds 的用户的任何信息~~
+
+2020/10/5: 在列表页新增了 [GA](https://github.com/hellodword/wechat-feeds/blob/82c14ebd869fe11618142d9a04b487b53988dd3e/index.html#L22-L30), 只是为了统计一下列表页的使用情况, 如有介意, 可以使用浏览器插件屏蔽或者用 [list.csv](https://github.com/hellodword/wechat-feeds/blob/main/list.csv) 手动搜索拼接链接代替列表页.
+
+2021/03/07: [#895](https://github.com/hellodword/wechat-feeds/issues/895) 图标的实现会请求一台服务器, 代码见 [favicon](https://github.com/hellodword/wechat-feeds/tree/favicon), 是有能力获取订阅者的 IP 地址的. 我承诺我没有记录数据, 但我觉得就算我被信任, 这种仅仅建立在对个体的信任上的方式不健康, **有隐私风险**, 大家有什么好的办法可以 issue 与我交流
 
 --- 
 ## 如何使用
@@ -141,11 +148,16 @@
 
 #### 手动获取
 
+<details>
+<summary><b>展开查看</b></summary>
+
 1. 选择一篇文章复制链接, 注意如果公众号已被永久屏蔽, 就不用再添加了, 会不定期清理已屏蔽的公众号; 如果公众号已迁移, 用迁移后的 bizid
 
 ![](img/migrate.png)
 
 2. 在浏览器中打开链接, 右键查看网页源代码, 搜索 `var biz`, 可以搜到 `var biz = ""||"MzI1NTQxODA4NA==";`, 那么 `MzI1NTQxODA4NA==` 也就是需要的 bizid
+
+</details>
 
 ### 服务是否稳定?
 
@@ -157,20 +169,12 @@
 
 07,11,13,16,20,23
 
-如果有更好的时间点设计欢迎 issue 告诉我, 因为凌晨这段时间推送的更新很少, 抓取有点浪费
+如果有更好的时间点设计欢迎 [告诉我](#交流), 因为凌晨这段时间推送的更新很少, 抓取有点浪费
 
 
 ### 数量是否有上限?
 
 鉴于账号限制, 暂时只打算提供10000个公众号的服务, 每个 feed 至多只保留20篇
-
-### 是否有隐私风险?
-
-feeds 托管在 github 上, 我无法获取订阅这些 feeds 的用户的任何信息
-
-2020/10/5: 在列表页新增了 [GA](https://github.com/hellodword/wechat-feeds/blob/82c14ebd869fe11618142d9a04b487b53988dd3e/index.html#L22-L30), 只是为了统计一下列表页的使用情况, 如有介意, 可以使用 [list.csv](https://github.com/hellodword/wechat-feeds/blob/main/list.csv) 代替列表页.
-
-2021/03/07: [#895](https://github.com/hellodword/wechat-feeds/issues/895) 图标的实现会请求一台服务器, 代码见 [favicon](https://github.com/hellodword/wechat-feeds/tree/favicon), 我承诺我没有记录数据, 但我觉得就算我被信任, 这种仅仅建立在对个体的信任上的方式不健康, 有隐私风险, 大家有什么好的办法可以 issue 与我交流
 
 ### 是如何爬取的?
 
@@ -178,18 +182,21 @@ feeds 托管在 github 上, 我无法获取订阅这些 feeds 的用户的任何
 
 ### csv 转义方式
 
+<details>
+<summary><b>展开查看</b></summary>
+
 **首先确保你的输入法切换到半角符号状态**
 
 
 1. 如果内容中有**半角**双引号, 需要在每个**半角**双引号前面再加一个**半角**双引号来转义, 然后将内容用一对**半角**双引号包起来:
 
-   假设需要转义的内容为: 
+   假设需要转义的内容为:
 
    ```
    它说:"你好"
    ```
 
-   则改为: 
+   则改为:
 
    ```
    "它说:""你好"""
@@ -197,13 +204,13 @@ feeds 托管在 github 上, 我无法获取订阅这些 feeds 的用户的任何
 
 2. 如果内容中有**半角**逗号, 将内容用一对**半角**双引号包起来:
 
-   假设需要转义的内容为: 
+   假设需要转义的内容为:
 
    ```
    你好,世界
    ```
 
-   则改为: 
+   则改为:
 
    ```
    "你好,世界"
@@ -213,19 +220,22 @@ feeds 托管在 github 上, 我无法获取订阅这些 feeds 的用户的任何
 
    > 不建议包含换行
 
-   假设需要转义的内容为: 
+   假设需要转义的内容为:
 
    ```
    它说:"你好世界"
    它说:"知道了"
    ```
 
-   则改为: 
+   则改为:
 
    ```
    "它说:""你好世界""
    它说:""知道了"""
    ```
+   
+</details>
+
 
 ---
 
@@ -233,25 +243,9 @@ feeds 托管在 github 上, 我无法获取订阅这些 feeds 的用户的任何
 
 > 参见 [issue 390](https://github.com/hellodword/wechat-feeds/issues/390#issuecomment-743722383) 
 
-> 我看了下这个公众号，它每天推送时间都是上午8:30，所以我猜测它是定时发布的，而 feeds 中显示的时间就是微信服务器收到这篇文章的时间。
+> 我看了下这个公众号, 它每天推送时间都是上午8:30, 所以我猜测它是定时发布的, 而 feeds 中显示的时间就是微信服务器收到这篇文章的时间, .
 
-> 比如 [这一篇](https://mp.weixin.qq.com/s/Beh1Lgmvtb29HIq2_v9Gpg) ， 8:30 对应的 1607733000 在它的网页源码中可以看到，所以其实这和抓取全文可能是同一个范畴的问题
-
-## 结构
-
-
-### main
-主分支 `main`:
-
-1. [list.csv](https://github.com/hellodword/wechat-feeds/blob/main/list.csv): 由 `name`, `bizid`, `description` 组成的无序公众号列表
-
-### feeds
-
-分支 `feeds` 储存更新的 feeds
-
-### pages
-
-分支 `pages` 是列表页的源码, 部署在 github pages 上, 其中的 [VERSION](https://github.com/hellodword/wechat-feeds/blob/pages/VERSION) 文件会随着 [feeds 分支](#feeds) 自动更新.
+> 比如 [这一篇](https://mp.weixin.qq.com/s/Beh1Lgmvtb29HIq2_v9Gpg) , 8:30 对应的 1607733000 在它的网页源码中可以看到, 所以其实这和抓取全文可能是同一个范畴的问题
 
 ---
 ## TODO
@@ -266,6 +260,14 @@ feeds 托管在 github 上, 我无法获取订阅这些 feeds 的用户的任何
 - [ ] 思考更简单的添加公众号的方式, 前提是继续控制成本
 - [ ] 思考如何用低成本实现添加全文(格式处理/IP限制/静态资源限制等问题有点麻烦, 成本很难控制)
 - [ ] 考虑 feeds 分支使用 force push, 以避免触及[仓库容量预警上限](https://docs.github.com/cn/github/managing-large-files/what-is-my-disk-quota#file-and-repository-size-limitations)
+
+---
+
+## 交流
+
+> 首推 [issues](https://github.com/hellodword/wechat-feeds/issues)
+
+> 有什么需要频繁交流的问题和建议可以在 [![聊天室](https://badges.gitter.im/wechat-feeds/chat.svg)](https://gitter.im/wechat-feeds/chat?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge) 交流, 当然在这之前建议先阅读本文档.
 
 ---
 
