@@ -1,26 +1,41 @@
 package main
 
 import (
+	"bytes"
+	"context"
 	"encoding/json"
 	"fmt"
-	"io"
-	"net/http"
+	"github.com/google/go-github/v33/github"
+	"github.com/hellodword/wechat-feeds/common"
 	"os"
 
 	"github.com/gocarina/gocsv"
 )
 
+const (
+	Owner = "hellodword"
+	Repo  = "wechat-feeds"
+
+	IssueID = 608
+)
+
 func main() {
-	bis, e := getList()
-	if e != nil {
-		fmt.Println("get list error", e)
-		os.Exit(0)
-	}
-	bds, e := getDetails()
-	if e != nil {
-		fmt.Println("get details error", e)
-		os.Exit(0)
-	}
+
+	ctx := context.Background()
+
+	//var event github.IssueEvent
+	//common.ParseGithubEvent(&event)
+
+	clientWithToken, client := common.MakeClients(ctx, os.Getenv("GITHUB_ACCESS_TOKEN"))
+	_, _ = clientWithToken, client
+	client = clientWithToken // for private test
+
+	_, _, _ = clientWithToken.Issues.AddLabelsToIssue(ctx, Owner, Repo,
+		IssueID,
+		[]string{string(common.LabelCheck)})
+
+	bis := getList()
+	bds := getDetails()
 
 	bs := ""
 
@@ -36,12 +51,27 @@ LABEL:
 		bs += "\n"
 	}
 
+	var body string
 	if bs != "" {
 		bs = "以下 bizid 可能有问题或尚未同步：\n" + bs
-		fmt.Println(bs)
+		//fmt.Println(bs)
+		body = bs
 	} else {
-		fmt.Println("一切正常")
+		//fmt.Println("一切正常")
+		body = "一切正常"
 	}
+
+	fmt.Println(body)
+
+	_, _, err := clientWithToken.Issues.CreateComment(ctx, Owner, Repo,
+		IssueID,
+		&github.IssueComment{
+			Body: github.String(body),
+		})
+	if err != nil {
+		panic("Issues.CreateComment") // token privacy
+	}
+
 	os.Exit(0)
 }
 
@@ -51,28 +81,20 @@ type bizInfo struct {
 	Description string `csv:"description"`
 }
 
-func getList() ([]*bizInfo, error) {
+func getList() []*bizInfo {
 
-	r, e := http.Get("https://github.com/hellodword/wechat-feeds/raw/main/list.csv")
-	if e != nil {
-		return nil, e
+	body := common.Fetch("https://github.com/hellodword/wechat-feeds/raw/main/list.csv")
+	if !common.WithUTF8Bom(body) {
+		panic("list.csv not utf8 bom")
 	}
 
-	defer r.Body.Close()
-
-	bom := make([]byte, 3)
-	_, e = io.ReadFull(r.Body, bom)
-	if e != nil {
-		return nil, e
+	var bis []*bizInfo
+	err := gocsv.Unmarshal(bytes.NewReader(common.TrimUTF8Bom(body)), &bis)
+	if err != nil {
+		panic(err)
 	}
 
-	bis := []*bizInfo{}
-	e = gocsv.Unmarshal(r.Body, &bis)
-	if e != nil {
-		return nil, e
-	}
-
-	return bis, nil
+	return bis
 }
 
 type bizDetail struct {
@@ -80,19 +102,15 @@ type bizDetail struct {
 	BizID string `csv:"bizid" json:"bizid"`
 }
 
-func getDetails() ([]*bizDetail, error) {
-	r, e := http.Get("https://github.com/hellodword/wechat-feeds/raw/feeds/details.json")
-	if e != nil {
-		return nil, e
+func getDetails() []*bizDetail {
+
+	body := common.Fetch("https://github.com/hellodword/wechat-feeds/raw/feeds/details.json")
+
+	var bds []*bizDetail
+	err := json.Unmarshal(body, &bds)
+	if err != nil {
+		panic(err)
 	}
 
-	defer r.Body.Close()
-
-	bds := []*bizDetail{}
-	e = json.NewDecoder(r.Body).Decode(&bds)
-	if e != nil {
-		return nil, e
-	}
-
-	return bds, nil
+	return bds
 }
