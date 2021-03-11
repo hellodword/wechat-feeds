@@ -346,9 +346,9 @@
                             ? list
                             : list.filter(item => {
                                   return (
-                                      (item['name'] || '').indexOf(key) > -1 ||
-                                      (item['description'] || '').indexOf(key) > -1 ||
-                                      (item['bizid'] && item['bizid'] === key)
+                                      (item['name'] || '').toUpperCase().indexOf(key.toUpperCase()) !== -1 ||
+                                      (item['description'] || '').toUpperCase().indexOf(key.toUpperCase()) !== -1 ||
+                                      (item['bizid'] || '').indexOf(key) === 0
                                   );
                               });
                     },
