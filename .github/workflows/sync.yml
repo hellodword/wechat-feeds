@@ -3,6 +3,8 @@ name: sync feeds
 on: 
   page_build:
   workflow_dispatch:
+  schedule:
+    - cron: "0 * * * *" # Runs every hour, on the hour
 
 jobs:
   check:
