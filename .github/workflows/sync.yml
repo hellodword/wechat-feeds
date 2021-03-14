@@ -31,21 +31,32 @@ jobs:
           cd feeds
           echo "${{ steps.set_commit_message_1.outputs.COMMIT_MSG }}"
 
+      - name: ssh
+        run: |
+          sudo sed -i 's/StrictHostKeyChecking/# StrictHostKeyChecking/' /etc/ssh/ssh_config
+          echo "StrictHostKeyChecking no" | sudo tee -a /etc/ssh/ssh_config
+          sudo mkdir -p ~/.ssh/
+          echo "$SSH_PRIVATE_KEY" >id_rsa
+          sudo mv id_rsa ~/.ssh/
+          sudo chmod 600 ~/.ssh/id_rsa
+        shell: bash
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+
       - name: sync feeds
         run: |
           cd feeds
           rm -rf .git
           git init
-          git remote add origin "https://gitee.com/${{ secrets.YOUR_GITEE_NAME }}/${{ secrets.TARGET_NAME }}.git"  >/dev/null 2>&1
+          git remote add origin git@gitee.com:${{ secrets.YOUR_GITEE_NAME }}/${{ secrets.TARGET_NAME }}.git
           git config user.name    "${{ secrets.YOUR_GITEE_NAME }}"
           git config user.email   "${{ secrets.YOUR_GITEE_EMAIL }}"
           git add .
           git gc
           COMMIT_MSG=$(date "+%Y-%m-%d %H:%M:%S")
           git commit -m "${{ steps.set_commit_message_1.outputs.COMMIT_MSG }}" >/dev/null 2>&1
-          git checkout -b feeds  >/dev/null 2>&1
-          git branch -d master  >/dev/null 2>&1
-          git push -f --repo "https://${{ secrets.YOUR_GITEE_NAME }}:${{ secrets.YOUR_GITEE_PWD }}@gitee.com/${{ secrets.YOUR_GITEE_NAME }}/${{ secrets.TARGET_NAME }}.git"  >/dev/null 2>&1 || git push -f --repo "https://${{ secrets.YOUR_GITEE_NAME }}:${{ secrets.YOUR_GITEE_PWD }}@gitee.com/${{ secrets.YOUR_GITEE_NAME }}/${{ secrets.TARGET_NAME }}.git"  >/dev/null 2>&1 || git push -f --repo "https://${{ secrets.YOUR_GITEE_NAME }}:${{ secrets.YOUR_GITEE_PWD }}@gitee.com/${{ secrets.YOUR_GITEE_NAME }}/${{ secrets.TARGET_NAME }}.git"  >/dev/null 2>&1
+          git branch -M feeds  >/dev/null 2>&1
+          git push -f -u origin feeds >/dev/null 2>&1 || git push -f -u origin feeds >/dev/null 2>&1
 
 
 
