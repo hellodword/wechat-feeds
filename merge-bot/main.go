@@ -132,7 +132,9 @@ func checkPRDetails(ctx context.Context, clientWithToken, client *github.Client,
 
 	if len(cs) != 1 {
 		closePR(ctx, clientWithToken, pr, common.LabelInvalid,
-			fmt.Sprintf("这个 pr 有 %d 个 commits，请确保只有一个 commit，你可以关闭这个 pr 重新提一个。", len(cs)))
+			fmt.Sprintf("这个 pr [有 %d 个 commits](https://github.com/hellodword/wechat-feeds/pull/%d/commits)，请确保只有一个 commit，你可以关闭这个 pr 重新提一个。",
+				len(cs),
+				pr.GetNumber()))
 		return false
 	}
 
@@ -143,7 +145,8 @@ func checkPRDetails(ctx context.Context, clientWithToken, client *github.Client,
 
 	if !checkCommitMessage(strings.Split(cs[0].GetCommit().GetMessage(), "\n")[0]) {
 		closePR(ctx, clientWithToken, pr, common.LabelInvalid,
-			"提交信息不符合格式，仔细阅读第三步。\n为了方便自动化，所以需要定一个格式，希望理解。")
+			fmt.Sprintf("[提交信息](https://github.com/hellodword/wechat-feeds/pull/%d/commits) 不符合格式，仔细阅读第三步。\n为了方便自动化，所以需要定一个格式。",
+				pr.GetNumber()))
 		return false
 	}
 
@@ -159,7 +162,9 @@ func checkPRDetails(ctx context.Context, clientWithToken, client *github.Client,
 
 	if len(fs) != 1 || fs[0].GetFilename() != "list.csv" {
 		closePR(ctx, clientWithToken, pr, common.LabelInvalid,
-			fmt.Sprintf("这个 pr 修改了 %d 个文件，请确保只修改了 list.csv", len(fs)))
+			fmt.Sprintf("这个 pr [修改了 %d 个文件](https://github.com/hellodword/wechat-feeds/pull/%d/files)，请确保只修改了 list.csv",
+				len(fs),
+				pr.GetNumber()))
 		return false
 	}
 
