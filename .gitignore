@@ -1,0 +1,13 @@
+dist
+node_modules
+transpiled
+worker
+.idea
+.vscode
+.env
+.cargo-ok
+wasm-pack.log
+bin
+pkg
+**/*.rs.bk
+target

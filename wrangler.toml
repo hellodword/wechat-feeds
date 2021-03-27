@@ -1,0 +1,8 @@
+name = "proxy"
+type = "webpack"
+# account_id = ""
+# workers_dev = true
+# routes = []
+# zone_id = ""
+webpack_config = "webpack.config.js"
+

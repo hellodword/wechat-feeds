@@ -1,0 +1,49 @@
+name: deploy
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - proxy
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/cache@v2
+        id: cache-cargo
+        with:
+          path: |
+            ~/.cargo/bin
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: ${{ runner.os }}-deploy-${{ hashFiles('**/Cargo.lock') }}
+
+      - name: Install latest stable
+        if: steps.cache-cargo.outputs.cache-hit != 'true'
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          override: true
+
+      - name: Install Wrangler CLI
+        if: steps.cache-cargo.outputs.cache-hit != 'true'
+        uses: actions-rs/cargo@v1
+        with:
+          command: install
+          args: wrangler
+
+      - name: Configure
+        run: |
+          echo "${{ secrets.CLOUDFLARE_SECRETS }}" >.env
+
+      - name: Deploy to Cloudflare Workers
+        run: |
+          sudo chmod a+x ./publish.sh
+          ./publish.sh
