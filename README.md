@@ -65,7 +65,6 @@
    * [TODO](#todo)
    * [交流](#交流)
    * [更新状态](#更新状态)
-   * [捐赠](#捐赠)
 
 ---
 
@@ -275,25 +274,3 @@
 
 [更新状态](https://github.com/hellodword/wechat-feeds/issues/608#issuecomment-new)
 
----
-## 捐赠
-
-本项目使用完全免费. 但有一定的维护成本, 故此处开放捐赠, 但不对捐赠者做任何关于本项目的额外的承诺, 亦不会在项目中主动公开捐赠者信息. 
-
-
-<details>
-<summary>展开查看捐赠方式</summary>
-
-<h3>BTC</h3>
-<img src="img/sponsor/btc.jpg" />
-
-<h3>ETH (ERC20)</h3>
-<img src="img/sponsor/eth-erc20.jpg" />
-
-<h3>USDT (ERC20)</h3>
-<img src="img/sponsor/usdt-erc20.jpg" />
-
-<h3>XMR</h3>
-<img src="img/sponsor/xmr.jpg" />
-
-</details>
