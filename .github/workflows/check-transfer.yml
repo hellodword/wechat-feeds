@@ -1,7 +1,9 @@
-name: deal with issues
+name: check transfer
+
 on:
-  issues:
-    types: [opened]
+  workflow_dispatch:
+  schedule:
+    - cron: "0 0 * * *" # Runs at 00:00 UTC every day.
 
 jobs:
   build:
@@ -22,6 +24,6 @@ jobs:
       - name: Run
         id: check
         run: |
-          go run ./deal-with-issues
+          go run ./check-transfer
         env:
           GITHUB_ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}

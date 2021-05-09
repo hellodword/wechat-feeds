@@ -33,12 +33,6 @@ const (
 	ServicePer = 32
 )
 
-type bizInfo struct {
-	Name        string `csv:"name"`
-	BizID       string `csv:"bizid"`
-	Description string `csv:"description"`
-}
-
 /*
 
  */
@@ -182,7 +176,7 @@ func checkPRDetails(ctx context.Context, clientWithToken, client *github.Client,
 		return false
 	}
 
-	var newBis []*bizInfo
+	var newBis []*common.BizInfo
 	err = gocsv.Unmarshal(bytes.NewReader(common.TrimUTF8Bom(newBody)), &newBis)
 	if err != nil {
 		closePR(ctx, clientWithToken, pr, common.LabelInvalid,
@@ -191,7 +185,7 @@ func checkPRDetails(ctx context.Context, clientWithToken, client *github.Client,
 	}
 
 	var oldBody []byte
-	var oldBis []*bizInfo
+	var oldBis []*common.BizInfo
 	for {
 		oldBody = common.Fetch("https://github.com/hellodword/wechat-feeds/raw/main/list.csv") // fetch(fs[0].GetRawURL())
 		if !common.WithUTF8Bom(oldBody) {

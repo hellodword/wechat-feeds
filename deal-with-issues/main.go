@@ -3,7 +3,6 @@ package main
 import (
 	"bytes"
 	"context"
-	"errors"
 	"fmt"
 	"github.com/google/go-github/v33/github"
 	"github.com/hellodword/wechat-feeds/common"
@@ -51,7 +50,7 @@ func main() {
 	}
 
 	done := map[string]int{}
-	succ := map[string]WXArticle{}
+	succ := map[string]common.WXArticle{}
 	fail := map[string]error{}
 
 	for i := 0; i < len(us); i++ {
@@ -66,7 +65,7 @@ func main() {
 			time.Sleep(time.Second * 5)
 		}
 
-		article, err := fetchWX(us[i])
+		article, err := common.FetchWX(us[i])
 		if err == nil {
 			succ[article.BizID] = article
 		} else {
@@ -106,84 +105,6 @@ func main() {
 		body.String())
 
 	os.Exit(0)
-}
-
-type WXArticle struct {
-	Name        string
-	BizID       string
-	Description string
-}
-
-func getTransferTargetLink(s string) string {
-	r := regexp.MustCompile(`transferTargetLink = '(https?://mp\.weixin\.qq\.com/s[^\s\r\n]+)'`).FindStringSubmatch(s)
-	if len(r) < 2 {
-		return ""
-	} else {
-		return r[1]
-	}
-}
-
-func getBizID(s string) string {
-
-	// https://mp.weixin.qq.com/s/1I33XLA5uK1Iljvn3-XVDg
-	// https://mp.weixin.qq.com/s/etTO4fTRwyvSUuh2qJlIaw
-
-	r := regexp.MustCompile(`((var biz = [" =|]*")|(var appuin = [" =|]*")|(__biz=))([a-zA-Z\d/+=]+)`).FindStringSubmatch(s)
-	if len(r) == 6 {
-		return r[5]
-	} else {
-		return ""
-	}
-}
-
-func getName(s string) string {
-
-	// 图文 https://mp.weixin.qq.com/s/g0H8YxjN5kUR3Kx9cPgNlA
-
-	r := regexp.MustCompile(`(var nickname = "([^\n]+)";)|(d\.nick_name = getXmlValue\('nick_name.DATA'\) \|\| '([^\n]+)';)|(<strong class="account_nickname_inner js_go_profile">([^\n]+)</strong>)`).FindStringSubmatch(s)
-	if len(r) != 7 {
-		return ""
-	}
-
-	if r[2] != "" {
-		return r[2]
-	}
-	if r[4] != "" {
-		return r[4]
-	}
-	if r[6] != "" {
-		return r[6]
-	}
-
-	return ""
-
-}
-
-func fetchWX(u string) (article WXArticle, err error) {
-	fmt.Println("link", u)
-
-	body := common.Fetch(u)
-
-	s := string(body)
-
-	link := getTransferTargetLink(s)
-	if link != "" {
-		fmt.Println("transfer link", link)
-		return fetchWX(link)
-	}
-
-	article.BizID = getBizID(s)
-	if article.BizID == "" {
-		err = errors.New("no biz id")
-		return
-	}
-	article.Name = getName(s)
-	if article.Name == "" {
-		err = errors.New("no name")
-		return
-	}
-
-	return
 }
 
 func closeIssue(ctx context.Context, clientWithToken *github.Client, issue *github.Issue, label common.Label, comment string) {

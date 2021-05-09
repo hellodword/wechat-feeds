@@ -75,20 +75,14 @@ LABEL:
 	os.Exit(0)
 }
 
-type bizInfo struct {
-	Name        string `csv:"name"`
-	BizID       string `csv:"bizid"`
-	Description string `csv:"description"`
-}
-
-func getList() []*bizInfo {
+func getList() []*common.BizInfo {
 
 	body := common.Fetch("https://github.com/hellodword/wechat-feeds/raw/main/list.csv")
 	if !common.WithUTF8Bom(body) {
 		panic("list.csv not utf8 bom")
 	}
 
-	var bis []*bizInfo
+	var bis []*common.BizInfo
 	err := gocsv.Unmarshal(bytes.NewReader(common.TrimUTF8Bom(body)), &bis)
 	if err != nil {
 		panic(err)
@@ -97,16 +91,11 @@ func getList() []*bizInfo {
 	return bis
 }
 
-type bizDetail struct {
-	Name  string `csv:"name" json:"name"`
-	BizID string `csv:"bizid" json:"bizid"`
-}
-
-func getDetails() []*bizDetail {
+func getDetails() []*common.BizDetail {
 
 	body := common.Fetch("https://github.com/hellodword/wechat-feeds/raw/feeds/details.json")
 
-	var bds []*bizDetail
+	var bds []*common.BizDetail
 	err := json.Unmarshal(body, &bds)
 	if err != nil {
 		panic(err)
