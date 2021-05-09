@@ -69,13 +69,22 @@ func FetchWX(u string) (article WXArticle, err error) {
 	s := string(body)
 
 	if article.FailReason == "" {
-		if strings.Index(s, `此帐号已自主注销，内容无法查看`) != -1 {
+		if strings.Index(s, `此帐号已被屏蔽, 内容无法查看`) != -1 {
+			article.FailReason = `此帐号已被屏蔽, 内容无法查看`
+			err = errors.New(article.FailReason)
+			return
+		} else if strings.Index(s, `此帐号已自主注销，内容无法查看`) != -1 {
 			article.FailReason = `此帐号已自主注销，内容无法查看`
+			err = errors.New(article.FailReason)
+			return
+		} else if strings.Index(s, `原帐号迁移时未将文章素材同步至新帐号，该链接已不可访问`) != -1 {
+			article.FailReason = `原帐号迁移时未将文章素材同步至新帐号，该链接已不可访问`
 			err = errors.New(article.FailReason)
 			return
 		} else if strings.Index(s, `该公众号已迁移`) != -1 {
 			article.FailReason = `该公众号已迁移`
 		}
+
 	}
 
 	link := MatchTransferTargetLink(s)

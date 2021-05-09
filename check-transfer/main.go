@@ -42,17 +42,24 @@ func main() {
 		[]string{string(common.LabelCheck)})
 
 	buf := bytes.NewBuffer(nil)
-	buf.WriteString(`| name | bizid | new | reason |
-| ---  | ----- | --- | ------ |`)
+	//	buf.WriteString(`| name | bizid | new | reason |
+	////| ---  | ----- | --- | ------ |`)
 	for i := range details {
+
+		newBiz, reason := checkTransfer(details[i].BizID)
+		if newBiz == "" && reason == "" {
+			continue
+		}
+		if newBiz == details[i].BizID {
+			continue
+		}
+
 		buf.WriteString("\n")
 		buf.WriteString("| ")
 		buf.WriteString(details[i].Name)
 		buf.WriteString(" | ")
 		buf.WriteString(fmt.Sprintf(`[%s](https://github.com/hellodword/wechat-feeds/raw/feeds/%s.xml)`,
 			details[i].BizID, details[i].BizID))
-
-		newBiz, reason := checkTransfer(details[i].BizID)
 		buf.WriteString(" | ")
 		buf.WriteString(newBiz)
 		buf.WriteString(" | ")
@@ -62,14 +69,17 @@ func main() {
 	}
 
 	fmt.Println(buf.String())
+	if buf.String() != "" {
+		_, _, err := clientWithToken.Issues.CreateComment(ctx, Owner, Repo,
+			IssueID,
+			&github.IssueComment{
+				Body: github.String(`| name | bizid | new | reason |
+| ---  | ----- | --- | ------ |` + buf.String()),
+			})
+		if err != nil {
+			panic("Issues.CreateComment") // token privacy
+		}
 
-	_, _, err := clientWithToken.Issues.CreateComment(ctx, Owner, Repo,
-		IssueID,
-		&github.IssueComment{
-			Body: github.String(buf.String()),
-		})
-	if err != nil {
-		panic("Issues.CreateComment") // token privacy
 	}
 
 	os.Exit(0)
