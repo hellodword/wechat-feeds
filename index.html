@@ -108,22 +108,6 @@
                     >
                     <br />
                     <br />
-                    <a href="https://github.com/hellodword/wechat-feeds/blob/pages/README.md" rel="noreferrer" target="_blank">
-                        <b>前端代码（页面实在太难写了求助😂）</b>
-                    </a>
-                    <br />
-                    <br />
-                    <el-switch
-                        style="display: block"
-                        v-model="github"
-                        active-color="#13ce66"
-                        inactive-color="#ff4949"
-                        inactive-text="国内 gitee 源"
-                        active-text="全球 github 源"
-                        @change="switchsource()"
-                    >
-                    </el-switch>
-                    <br />
                     当前总数：{{listdata.length}}
                     <br />
                     数据版本：{{version}}（可能存在缓存问题，可以试试刷新一下）
@@ -132,7 +116,7 @@
                     项目主页：<a href="https://github.com/hellodword/wechat-feeds" target="_blank" rel="noreferrer">hellodword/wechat-feeds</a>
                     <br />
                     <br />
-                    感谢（排名不分先后）：
+                    前端感谢（排名不分先后）：
                     <a href="https://github.com/shulandmimi" target="_blank" rel="noreferrer"> shulandmimi</a>
                     <a href="https://github.com/Treblex" target="_blank" rel="noreferrer"> Treblex</a>
                 </div>
@@ -353,16 +337,7 @@
                               });
                     },
                     makeRssUrl({ bizid = '' }) {
-                        return this.github
-                            ? `https://github.com/hellodword/wechat-feeds/raw/feeds/${bizid}.xml`
-                            : `https://gitee.com/BlogZ/wechat-feeds/raw/feeds/${bizid}.xml`;
-                    },
-                    switchsource() {
-                        this.$message({
-                            showClose: true,
-                            message: this.github ? '已切换到全球源' : '已切换到国内源',
-                            type: 'success',
-                        });
+                        return `https://github.com/hellodword/wechat-feeds/raw/feeds/${bizid}.xml`;
                     },
                     copy(text) {
                         let button = document.createElement('button');
