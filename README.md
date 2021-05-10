@@ -249,15 +249,12 @@
 ---
 ## TODO
 
-- [x] 同步 gitee 提升访问体验
 - [x] 根据 list.csv 生成列表页, 通过 pages 展示 (感谢 [Treblex](https://github.com/Treblex) 的 [Treblex/wechat-feeds-page](https://github.com/Treblex/wechat-feeds-page), 感谢 [shulandmimi](https://github.com/shulandmimi))
 - [x] 给 pr 和 commit 添加自动 checks
 - [x] 给 issue 添加 actions, 来自动获取 bizid 等
-- [ ] 兼容迁移公众号/自动移除已屏蔽公众号
+- [x] 兼容迁移公众号/自动移除已屏蔽公众号
 - [x] 列表页性能提升, 一次性加载性能压力太大
 - [ ] 考虑添加更多可供列表页搜索/过滤的属性, 例如微信号、 TAG 等
-- [ ] 思考更简单的添加公众号的方式, 前提是继续控制成本
-- [ ] 思考如何用低成本实现添加全文(格式处理/IP限制/静态资源限制等问题有点麻烦, 成本很难控制)
 - [ ] 考虑 feeds 分支使用 force push, 以避免触及[仓库容量预警上限](https://docs.github.com/cn/github/managing-large-files/what-is-my-disk-quota#file-and-repository-size-limitations)
 
 ---
