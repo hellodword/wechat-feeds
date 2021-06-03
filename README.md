@@ -52,6 +52,7 @@
 * [WeChat-Feeds](#wechat-feeds)
    * [声明](#声明)
    * [隐私风险](#隐私风险)
+   * [更新状态](#更新状态)
    * [如何使用](#如何使用)
    * [如何添加/修改公众号](#如何添加修改公众号)
    * [FAQ](#faq)
@@ -62,6 +63,8 @@
       * [是如何爬取的?](#是如何爬取的)
       * [csv 转义方式](#csv-转义方式)
       * [文章更新时间为什么对不上?](#文章更新时间为什么对不上)
+      * [是否会开源?](#是否会开源)
+      * [是否算滥用?](#是否算滥用)
    * [TODO](#todo)
    * [交流](#交流)
    * [更新状态](#更新状态)
@@ -89,6 +92,16 @@
 2020/10/5: 在列表页新增了 [GA](https://github.com/hellodword/wechat-feeds/blob/82c14ebd869fe11618142d9a04b487b53988dd3e/index.html#L22-L30), 只是为了统计一下列表页的使用情况, 如有介意, 可以使用浏览器插件屏蔽或者用 [list.csv](https://github.com/hellodword/wechat-feeds/blob/main/list.csv) 手动搜索拼接链接代替列表页.
 
 2021/03/07: [#895](https://github.com/hellodword/wechat-feeds/issues/895) 图标的实现会请求一台服务器, 代码见 [favicon](https://github.com/hellodword/wechat-feeds/tree/favicon), 是有能力获取订阅者的 IP 地址的. 我承诺我没有记录数据, 但我觉得就算我被信任, 这种仅仅建立在对个体的信任上的方式不健康, **有隐私风险**, 大家有什么好的办法可以 issue 与我交流
+
+---
+
+## 更新状态
+
+> 如果需要某项实时通知, 可以点击对应页面的 Subscribe
+
+- [更新状态](https://github.com/hellodword/wechat-feeds/issues/608#issuecomment-new)
+- [异常状态](https://github.com/hellodword/wechat-feeds/issues/2471#issuecomment-new)
+- [迁移/屏蔽/注销检测](https://github.com/hellodword/wechat-feeds/issues/2387#issuecomment-new)
 
 --- 
 ## 如何使用
@@ -247,6 +260,18 @@
 > 比如 [这一篇](https://mp.weixin.qq.com/s/Beh1Lgmvtb29HIq2_v9Gpg) , 8:30 对应的 1607733000 在它的网页源码中可以看到, 所以其实这和抓取全文可能是同一个范畴的问题
 
 ---
+
+### 是否会开源?
+
+> 可公开的部分见各个分支的源码, 有编程能力的可以反代并且自建图标服务器消除隐私风险和 MIME 的问题, 除此之外暂无开源计划, 况且我真是手动抄录的 
+
+---
+
+### 是否算滥用?
+
+> 是否算滥用 github 这个问题, 我查阅了很久 [ToS](https://docs.github.com/en/github/site-policy/github-terms-of-service), 我认为对于此项目来说是不算的, 欢迎与我讨论此点.
+
+---
 ## TODO
 
 - [x] 根据 list.csv 生成列表页, 通过 pages 展示 (感谢 [Treblex](https://github.com/Treblex) 的 [Treblex/wechat-feeds-page](https://github.com/Treblex/wechat-feeds-page), 感谢 [shulandmimi](https://github.com/shulandmimi))
@@ -265,9 +290,4 @@
 
 > 有什么需要频繁交流的问题和建议可以在 [![聊天室](https://badges.gitter.im/wechat-feeds/chat.svg)](https://gitter.im/wechat-feeds/chat?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge) 交流, 当然在这之前建议先阅读本文档.
 
----
-
-## 更新状态
-
-[更新状态](https://github.com/hellodword/wechat-feeds/issues/608#issuecomment-new)
 
