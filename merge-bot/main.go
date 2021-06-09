@@ -29,7 +29,7 @@ const (
 
 	WorkFlow = "merge-bot"
 
-	ServiceMax = 10000
+	ServiceMax = 20000
 	ServicePer = 32
 )
 
