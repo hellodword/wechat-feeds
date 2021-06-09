@@ -89,6 +89,7 @@ func checkTransfer(bizid string) (newBiz, reason string) {
 	fp := gofeed.NewParser()
 	feed, err := fp.ParseString(string(common.Fetch(fmt.Sprintf("https://github.com/hellodword/wechat-feeds/raw/feeds/%s.xml", url.QueryEscape(bizid)))))
 	if err != nil || feed == nil || len(feed.Items) == 0 {
+		reason = "解析失败" // 随便处理一下
 		return
 	}
 
