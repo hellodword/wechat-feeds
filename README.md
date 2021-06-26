@@ -1,5 +1,26 @@
 # WeChat-Feeds
 
+
+---
+<div align=center>
+   <a href="https://github.com/hellodword/wechat-feeds/issues/3882">
+      <font size=8><b>停止服务</b></font>
+   </a>
+</div>
+<div align=center>
+   <a href="https://github.com/hellodword/wechat-feeds/issues/3882">
+      <font size=8><b>停止服务</b></font>
+   </a>
+</div>
+<div align=center>
+   <a href="https://github.com/hellodword/wechat-feeds/issues/3882">
+      <font size=8><b>停止服务</b></font>
+   </a>
+</div>
+    
+
+---
+
 <div align=center><img src="img/wechat.png" height="160" width="160" /></div>
 
 
